@@ -88,7 +88,7 @@ public class TypeScriptRxjsClientCodegen extends AbstractTypeScriptClientCodegen
         supportingFiles.add(new SupportingFile("runtime.mustache", "", "runtime.ts"));
         supportingFiles.add(new SupportingFile("servers.mustache", "", "servers.ts"));
         supportingFiles.add(new SupportingFile("apis.index.mustache", apiPackage().replace('.', File.separatorChar), "index.ts"));
-        supportingFiles.add(new SupportingFile("models.index.mustache", modelPackage().replace('.', File.separatorChar), "index.ts"));
+        supportingFiles.add(new SupportingFile("models.index.mustache", modelPackage(null).replace('.', File.separatorChar), "index.ts"));
         supportingFiles.add(new SupportingFile("tsconfig.mustache", "", "tsconfig.json"));
         supportingFiles.add(new SupportingFile("gitignore", "", ".gitignore"));
         if (additionalProperties.containsKey(NPM_NAME)) {

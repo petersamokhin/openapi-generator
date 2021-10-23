@@ -29,6 +29,7 @@ import org.openapitools.codegen.meta.features.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -125,7 +126,7 @@ public class PhpSlimServerCodegen extends AbstractPhpCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         if (modelPackage.startsWith(invokerPackage + "\\")) {
             // need to strip out invokerPackage from path
             return (outputFolder + File.separator + toSrcPath(StringUtils.removeStart(modelPackage, invokerPackage + "\\"), srcBasePath));

@@ -24,6 +24,7 @@ import org.openapitools.codegen.utils.ProcessUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -709,5 +710,10 @@ public class KotlinClientCodegen extends AbstractKotlinCodegen {
         System.out.println("# This generator's contributed by Jim Schubert (https://github.com/jimschubert)#");
         System.out.println("# Please support his work directly via https://patreon.com/jimschubert \uD83D\uDE4F      #");
         System.out.println("################################################################################");
+    }
+
+    @Override
+    public String modelPackage(@Nullable String subpackage) {
+        return super.modelPackage(subpackage) + (subpackage != null ? "." + subpackage : "");
     }
 }

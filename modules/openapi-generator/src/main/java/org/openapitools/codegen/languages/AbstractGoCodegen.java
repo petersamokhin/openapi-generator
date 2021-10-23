@@ -610,7 +610,7 @@ public abstract class AbstractGoCodegen extends DefaultCodegen implements Codege
     public Map<String, Object> postProcessModels(Map<String, Object> objs) {
         // remove model imports to avoid error
         List<Map<String, String>> imports = (List<Map<String, String>>) objs.get("imports");
-        final String prefix = modelPackage();
+        final String prefix = modelPackage(null);
         Iterator<Map<String, String>> iterator = imports.iterator();
         while (iterator.hasNext()) {
             String _import = iterator.next().get("import");

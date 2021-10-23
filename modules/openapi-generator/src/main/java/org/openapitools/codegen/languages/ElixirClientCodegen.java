@@ -31,6 +31,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
@@ -396,9 +397,10 @@ public class ElixirClientCodegen extends DefaultCodegen implements CodegenConfig
     /**
      * Location to write model files.  You can use the modelPackage() as defined when the class is
      * instantiated
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      */
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + sourceFolder() + File.separator + "model";
     }
 

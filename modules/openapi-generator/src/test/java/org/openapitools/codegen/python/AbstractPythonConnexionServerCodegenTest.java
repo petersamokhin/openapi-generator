@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.CodegenConstants;
 import org.openapitools.codegen.languages.AbstractPythonConnexionServerCodegen;
@@ -31,9 +30,9 @@ public class AbstractPythonConnexionServerCodegenTest {
         String pythonSrcRoot = Objects.toString(codegen.additionalProperties().get(PYTHON_SRC_ROOT), null);
         Assert.assertEquals(pythonSrcRoot, expectedValues.pythonSrcRoot);
         Assert.assertEquals(codegen.apiPackage(), expectedValues.expectedApiPackage);
-        Assert.assertEquals(codegen.modelFileFolder(), expectedValues.expectedModelFileFolder);
+        Assert.assertEquals(codegen.modelFileFolder(null), expectedValues.expectedModelFileFolder);
         Assert.assertEquals(codegen.apiFileFolder(), expectedValues.expectedApiFileFolder);
-        Assert.assertEquals(codegen.toModelImport(modelName), expectedValues.expectedImport);
+        Assert.assertEquals(codegen.toModelImport(modelName, null), expectedValues.expectedImport);
     }
 
     @DataProvider

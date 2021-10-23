@@ -306,7 +306,7 @@ public class JavaJAXRSCXFExtServerCodegenTest extends JavaJaxrsBaseTest {
         assertEquals(testerCodegen.getInvokerPackage(), "xyz.yyyyy.iiii.invoker");
         assertEquals(testerCodegen.getModelNamePrefix(), "MyPrefix");
         assertEquals(testerCodegen.getModelNameSuffix(), "MySuffix");
-        assertEquals(testerCodegen.modelPackage(), "xyz.yyyyy.mmmmm.model");
+        assertEquals(testerCodegen.modelPackage(null), "xyz.yyyyy.mmmmm.model");
         assertEquals(testerCodegen.getPrependFormOrBodyParameters(), Boolean.TRUE);
         assertEquals(testerCodegen.isRemoveOperationIdPrefix(), true);
         assertEquals(testerCodegen.getSortParamsByRequiredFlag(), Boolean.TRUE);
@@ -478,7 +478,7 @@ public class JavaJAXRSCXFExtServerCodegenTest extends JavaJaxrsBaseTest {
         assertNull(additionalProperties.get(CodegenConstants.MODEL_NAME_PREFIX));
         assertNull(additionalProperties.get(CodegenConstants.MODEL_NAME_SUFFIX));
         assertEquals(additionalProperties.get(CodegenConstants.MODEL_PACKAGE), "org.openapitools.model");
-        assertEquals(codegen.modelPackage(), "org.openapitools.model");
+        assertEquals(codegen.modelPackage(null), "org.openapitools.model");
         assertNull(additionalProperties.get(CodegenConstants.PREPEND_FORM_OR_BODY_PARAMETERS));
         assertNull(additionalProperties.get(CodegenConstants.REMOVE_OPERATION_ID_PREFIX));
         assertNull(additionalProperties.get(CodegenConstants.SORT_PARAMS_BY_REQUIRED_FLAG));
@@ -557,7 +557,7 @@ public class JavaJAXRSCXFExtServerCodegenTest extends JavaJaxrsBaseTest {
         Map<String, Object> additionalProperties = codegen.additionalProperties();
         assertEquals(additionalProperties.get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.FALSE);
         assertEquals(codegen.isHideGenerationTimestamp(), false);
-        assertEquals(codegen.modelPackage(), "xx.yyyyyyyy.model");
+        assertEquals(codegen.modelPackage(null), "xx.yyyyyyyy.model");
         assertEquals(additionalProperties.get(CodegenConstants.MODEL_PACKAGE), "xx.yyyyyyyy.model");
         assertEquals(codegen.apiPackage(), "xx.yyyyyyyy.api");
         assertEquals(additionalProperties.get(CodegenConstants.API_PACKAGE), "xx.yyyyyyyy.api");

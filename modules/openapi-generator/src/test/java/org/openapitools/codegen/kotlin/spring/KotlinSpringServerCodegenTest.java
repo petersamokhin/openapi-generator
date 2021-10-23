@@ -62,7 +62,7 @@ public class KotlinSpringServerCodegenTest {
         Assert.assertEquals(codegen.getLibrary(), KotlinSpringServerCodegen.SPRING_BOOT);
         Assert.assertTrue(codegen.supportedLibraries().containsKey(KotlinSpringServerCodegen.SPRING_BOOT));
 
-        Assert.assertEquals(codegen.modelPackage(), "org.openapitools.model");
+        Assert.assertEquals(codegen.modelPackage(null), "org.openapitools.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "org.openapitools.model");
         Assert.assertEquals(codegen.apiPackage(), "org.openapitools.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "org.openapitools.api");
@@ -90,7 +90,7 @@ public class KotlinSpringServerCodegenTest {
         codegen.setReactive(false);
         codegen.processOpts();
 
-        Assert.assertEquals(codegen.modelPackage(), "xx.yyyyyyyy.model");
+        Assert.assertEquals(codegen.modelPackage(null), "xx.yyyyyyyy.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "xx.yyyyyyyy.model");
         Assert.assertEquals(codegen.apiPackage(), "xx.yyyyyyyy.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "xx.yyyyyyyy.api");
@@ -136,7 +136,7 @@ public class KotlinSpringServerCodegenTest {
         openAPI.getInfo().setTitle("Some test API");
         codegen.preprocessOpenAPI(openAPI);
 
-        Assert.assertEquals(codegen.modelPackage(), "xyz.yyyyy.mmmmm.model");
+        Assert.assertEquals(codegen.modelPackage(null), "xyz.yyyyy.mmmmm.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "xyz.yyyyy.mmmmm.model");
         Assert.assertEquals(codegen.apiPackage(), "xyz.yyyyy.aaaaa.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "xyz.yyyyy.aaaaa.api");

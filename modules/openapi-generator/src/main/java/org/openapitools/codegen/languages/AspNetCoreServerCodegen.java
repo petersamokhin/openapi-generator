@@ -28,6 +28,7 @@ import org.openapitools.codegen.utils.URLPathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
@@ -420,7 +421,7 @@ public class AspNetCoreServerCodegen extends AbstractCSharpCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + sourceFolder + File.separator + packageName + File.separator + "Models";
     }
 

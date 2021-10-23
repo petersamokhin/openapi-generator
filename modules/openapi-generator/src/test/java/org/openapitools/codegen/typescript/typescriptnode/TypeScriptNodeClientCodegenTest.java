@@ -91,7 +91,7 @@ public class TypeScriptNodeClientCodegenTest {
 
     @Test(description = "prepend model import with ../model by default")
     public void defaultModelImportTest() {
-        Assert.assertEquals(codegen.toModelImport("ApiResponse"), "../model/apiResponse");
+        Assert.assertEquals(codegen.toModelImport("ApiResponse", null), "../model/apiResponse");
     }
 
     @Test(description = "use mapped name for model import when provided")
@@ -99,7 +99,7 @@ public class TypeScriptNodeClientCodegenTest {
         final String mappedName = "@namespace/dir/response";
         codegen.importMapping().put("ApiResponse", mappedName);
 
-        Assert.assertEquals(codegen.toModelImport("ApiResponse"), mappedName);
+        Assert.assertEquals(codegen.toModelImport("ApiResponse", null), mappedName);
     }
 
     @Test(description = "append api suffix to default api filename")

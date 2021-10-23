@@ -28,6 +28,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -380,8 +381,8 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     }
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage(subpackage).replace('.', File.separatorChar);
     }
 
     @Override
@@ -490,7 +491,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
         additionalProperties.put(CodegenConstants.SORT_MODEL_PROPERTIES_BY_REQUIRED_FLAG, getSortModelPropertiesByRequiredFlag());
 
         additionalProperties.put(CodegenConstants.API_PACKAGE, apiPackage());
-        additionalProperties.put(CodegenConstants.MODEL_PACKAGE, modelPackage());
+        additionalProperties.put(CodegenConstants.MODEL_PACKAGE, modelPackage(null));
 
         additionalProperties.put("apiDocPath", apiDocPath);
         additionalProperties.put("modelDocPath", modelDocPath);
@@ -620,14 +621,15 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
      * Return the fully-qualified "Model" name for import
      *
      * @param name the name of the "Model"
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      * @return the fully-qualified "Model" name for import
      */
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         // toModelImport is called while processing operations, but DefaultCodegen doesn't
         // define imports correctly with fully qualified primitives and models as defined in this generator.
         if (needToImport(name)) {
-            return super.toModelImport(name);
+            return super.toModelImport(name, subpackage);
         }
 
         return name;

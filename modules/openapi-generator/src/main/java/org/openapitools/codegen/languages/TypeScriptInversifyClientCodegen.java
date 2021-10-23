@@ -23,6 +23,8 @@ import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.parser.util.SchemaTypeUtil;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.meta.features.DocumentationFeature;
+
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -124,7 +126,7 @@ public class TypeScriptInversifyClientCodegen extends AbstractTypeScriptClientCo
         }
 
         //Files for building our lib
-        supportingFiles.add(new SupportingFile("models.mustache", modelPackage().replace('.', File.separatorChar), "models.ts"));
+        supportingFiles.add(new SupportingFile("models.mustache", modelPackage(null).replace('.', File.separatorChar), "models.ts"));
         supportingFiles.add(new SupportingFile("apis.mustache", apiPackage().replace('.', File.separatorChar), "api.ts"));
         supportingFiles.add(new SupportingFile("index.mustache", getIndexDirectory(), "index.ts"));
         supportingFiles.add(new SupportingFile("gitignore", "", ".gitignore"));
@@ -326,8 +328,8 @@ public class TypeScriptInversifyClientCodegen extends AbstractTypeScriptClientCo
     }
 
     @Override
-    public String toModelImport(String name) {
-        return modelPackage() + "/" + toModelFilename(name);
+    public String toModelImport(String name, @Nullable String subpackage) {
+        return modelPackage(subpackage) + "/" + toModelFilename(name);
     }
 
     public String getNpmRepository() {
@@ -344,7 +346,7 @@ public class TypeScriptInversifyClientCodegen extends AbstractTypeScriptClientCo
     }
 
     private String getModelnameFromModelFilename(String filename) {
-        String name = filename.substring((modelPackage() + "/").length());
+        String name = filename.substring((modelPackage(null) + "/").length());
         return camelize(name);
     }
 

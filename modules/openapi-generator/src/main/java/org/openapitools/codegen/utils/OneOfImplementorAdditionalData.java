@@ -113,7 +113,7 @@ public class OneOfImplementorAdditionalData {
                 // Add imports for interfaces
                 implcm.imports.add(intf);
                 Map<String, String> importsItem = new HashMap<String, String>();
-                importsItem.put("import", cc.toModelImport(intf));
+                importsItem.put("import", cc.toModelImport(intf, null));
                 implImports.add(importsItem);
             }
         }
@@ -127,7 +127,7 @@ public class OneOfImplementorAdditionalData {
         // Add imports
         for (Map<String, String> oneImport : additionalImports) {
             // exclude imports from this package - these are imports that only the oneOf interface needs
-            if (!implImports.contains(oneImport) && !oneImport.getOrDefault("import", "").startsWith(cc.modelPackage())) {
+            if (!implImports.contains(oneImport) && !oneImport.getOrDefault("import", "").startsWith(cc.modelPackage(null))) {
                 implImports.add(oneImport);
             }
         }

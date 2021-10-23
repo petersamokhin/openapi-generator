@@ -30,6 +30,7 @@ import org.openapitools.codegen.utils.ProcessUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -785,7 +786,7 @@ public class PowerShellClientCodegen extends DefaultCodegen implements CodegenCo
         }
 
         additionalProperties.put(CodegenConstants.API_PACKAGE, apiPackage());
-        additionalProperties.put(CodegenConstants.MODEL_PACKAGE, modelPackage());
+        additionalProperties.put(CodegenConstants.MODEL_PACKAGE, modelPackage(null));
 
         additionalProperties.put("apiDocPath", apiDocPath);
         additionalProperties.put("modelDocPath", modelDocPath);
@@ -885,8 +886,8 @@ public class PowerShellClientCodegen extends DefaultCodegen implements CodegenCo
 
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage();
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage(subpackage);
     }
 
     @Override

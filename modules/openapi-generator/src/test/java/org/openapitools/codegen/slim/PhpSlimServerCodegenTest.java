@@ -53,7 +53,7 @@ public class PhpSlimServerCodegenTest {
         codegen.setModelPackage(modelPackage);
         codegen.setInvokerPackage(invokerPackage);
 
-        Assert.assertEquals(codegen.modelFileFolder(), expected);
+        Assert.assertEquals(codegen.modelFileFolder(null), expected);
     }
 
     @DataProvider(name = "modelFileFolderProvider")

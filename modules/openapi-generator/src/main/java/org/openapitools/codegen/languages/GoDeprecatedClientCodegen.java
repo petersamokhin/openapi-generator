@@ -27,6 +27,7 @@ import org.openapitools.codegen.meta.Stability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.EnumSet;
 
@@ -220,7 +221,7 @@ public class GoDeprecatedClientCodegen extends AbstractGoCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator;
     }
 

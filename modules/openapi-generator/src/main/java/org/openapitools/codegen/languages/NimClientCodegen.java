@@ -28,6 +28,7 @@ import org.openapitools.codegen.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -213,7 +214,7 @@ public class NimClientCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         name = name.replaceAll("-", "_");
         if (importMapping.containsKey(name)) {
             return "model_" + StringUtils.underscore(importMapping.get(name));

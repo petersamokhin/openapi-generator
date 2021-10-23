@@ -31,7 +31,7 @@ public class PhpClientCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.TRUE);
         Assert.assertEquals(codegen.isHideGenerationTimestamp(), true);
-        Assert.assertEquals(codegen.modelPackage(), "OpenAPI\\Client\\Model");
+        Assert.assertEquals(codegen.modelPackage(null), "OpenAPI\\Client\\Model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "OpenAPI\\Client\\Model");
         Assert.assertEquals(codegen.apiPackage(), "OpenAPI\\Client\\Api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "OpenAPI\\Client\\Api");
@@ -49,7 +49,7 @@ public class PhpClientCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.FALSE);
         Assert.assertEquals(codegen.isHideGenerationTimestamp(), false);
-        Assert.assertEquals(codegen.modelPackage(), "My\\Client\\Model");
+        Assert.assertEquals(codegen.modelPackage(null), "My\\Client\\Model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "My\\Client\\Model");
         Assert.assertEquals(codegen.apiPackage(), "My\\Client\\Api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE),"My\\Client\\Api");
@@ -68,7 +68,7 @@ public class PhpClientCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.FALSE);
         Assert.assertEquals(codegen.isHideGenerationTimestamp(), false);
-        Assert.assertEquals(codegen.modelPackage(), "Xinvoker\\Xmodel");
+        Assert.assertEquals(codegen.modelPackage(null), "Xinvoker\\Xmodel");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "Xinvoker\\Xmodel");
         Assert.assertEquals(codegen.apiPackage(), "Xinvoker\\Xapi");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "Xinvoker\\Xapi");

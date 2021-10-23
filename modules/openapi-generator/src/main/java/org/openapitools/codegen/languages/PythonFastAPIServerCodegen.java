@@ -28,11 +28,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.meta.GeneratorMetadata;
 import org.openapitools.codegen.meta.Stability;
-import org.openapitools.codegen.meta.features.*;
 import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -134,7 +134,7 @@ public class PythonFastAPIServerCodegen extends AbstractPythonCodegen {
         supportingFiles.add(new SupportingFile("Dockerfile.mustache", "", "Dockerfile"));
         supportingFiles.add(new SupportingFile("requirements.mustache", "", "requirements.txt"));
         supportingFiles.add(new SupportingFile("security_api.mustache", SRC_DIR + File.separator + packageName.replace('.', File.separatorChar), "security_api.py"));
-        supportingFiles.add(new SupportingFile("extra_models.mustache", StringUtils.substringAfter(modelFileFolder(), outputFolder), "extra_models.py"));
+        supportingFiles.add(new SupportingFile("extra_models.mustache", StringUtils.substringAfter(modelFileFolder(null), outputFolder), "extra_models.py"));
 
         // Add __init__.py to all sub-folders under namespace pkg
         StringBuilder namespacePackagePath = new StringBuilder(SRC_DIR + File.separator + StringUtils.substringBefore(packageName, "."));
@@ -142,7 +142,7 @@ public class PythonFastAPIServerCodegen extends AbstractPythonCodegen {
             namespacePackagePath.append(File.separator).append(tmp);
             supportingFiles.add(new SupportingFile("__init__.mustache", namespacePackagePath.toString(), "__init__.py"));
         }
-        supportingFiles.add(new SupportingFile("__init__.mustache", StringUtils.substringAfter(modelFileFolder(), outputFolder), "__init__.py"));
+        supportingFiles.add(new SupportingFile("__init__.mustache", StringUtils.substringAfter(modelFileFolder(null), outputFolder), "__init__.py"));
         supportingFiles.add(new SupportingFile("__init__.mustache", StringUtils.substringAfter(apiFileFolder(), outputFolder), "__init__.py"));
 
         supportingFiles.add(new SupportingFile("conftest.mustache", testPackage.replace('.', File.separatorChar), "conftest.py"));
@@ -159,14 +159,14 @@ public class PythonFastAPIServerCodegen extends AbstractPythonCodegen {
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         String modelImport;
         if (StringUtils.startsWithAny(name, "import", "from")) {
             modelImport = name;
         } else {
             modelImport = "from ";
-            if (!"".equals(modelPackage())) {
-                modelImport += modelPackage() + ".";
+            if (!"".equals(modelPackage(subpackage))) {
+                modelImport += modelPackage(subpackage) + ".";
             }
             modelImport += toModelFilename(name) + " import " + name;
         }
@@ -254,7 +254,7 @@ public class PythonFastAPIServerCodegen extends AbstractPythonCodegen {
         for (String im : imports) {
             if (!im.equals(cm.classname)) {
                 HashMap<String, String> pyImport = new HashMap<>();
-                pyImport.put("import", toModelImport(im));
+                pyImport.put("import", toModelImport(im, null));
                 pyImports.add(pyImport);
             }
         }
@@ -273,8 +273,8 @@ public class PythonFastAPIServerCodegen extends AbstractPythonCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + SRC_DIR + File.separator + modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + SRC_DIR + File.separator + modelPackage(subpackage).replace('.', File.separatorChar);
     }
 
     @Override

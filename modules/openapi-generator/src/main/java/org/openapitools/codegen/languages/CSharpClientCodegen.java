@@ -923,7 +923,7 @@ public class CSharpClientCodegen extends AbstractCSharpCodegen {
 
     @Override
     public String modelTestFileFolder() {
-        return outputFolder + File.separator + testFolder + File.separator + testPackageName() + File.separator + modelPackage();
+        return outputFolder + File.separator + testFolder + File.separator + testPackageName() + File.separator + modelPackage(null);
     }
 
     @Override

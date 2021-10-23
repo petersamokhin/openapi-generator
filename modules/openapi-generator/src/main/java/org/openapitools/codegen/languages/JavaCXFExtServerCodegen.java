@@ -1261,7 +1261,7 @@ public class JavaCXFExtServerCodegen extends JavaCXFServerCodegen implements CXF
                     Map<String, String> im = new LinkedHashMap<String, String>();
                     String mapping = importMapping().get(nextImport);
                     if (mapping == null) {
-                        mapping = toModelImport(nextImport);
+                        mapping = toModelImport(nextImport, null);
                     }
                     if (mapping != null) {
                         im.put("import", mapping);

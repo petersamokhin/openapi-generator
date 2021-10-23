@@ -569,7 +569,7 @@ public class TypeScriptFetchClientCodegen extends AbstractTypeScriptClientCodege
         // Add supporting file only if we plan to generate files in /models
         if (allModels.size() > 0 && !addedModelIndex) {
             addedModelIndex = true;
-            supportingFiles.add(new SupportingFile("models.index.mustache", modelPackage().replace('.', File.separatorChar), "index.ts"));
+            supportingFiles.add(new SupportingFile("models.index.mustache", modelPackage(null).replace('.', File.separatorChar), "index.ts"));
         }
 
         this.addOperationModelImportInformation(operations);
@@ -754,7 +754,7 @@ public class TypeScriptFetchClientCodegen extends AbstractTypeScriptClientCodege
         List<String> existingRecordClassNames = new ArrayList<String>();
         List<String> existingClassNames = new ArrayList<String>();
         for (Map<String, Object> im : imports) {
-            String className = im.get("import").toString().replace(modelPackage() + ".", "");
+            String className = im.get("import").toString().replace(modelPackage(null) + ".", "");
             existingClassNames.add(className);
             existingRecordClassNames.add(className + "Record");
             im.put("className", className);

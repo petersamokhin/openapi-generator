@@ -79,7 +79,7 @@ public class JavaCXFClientCodegenTest {
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.FALSE);
         Assert.assertFalse(codegen.isHideGenerationTimestamp());
 
-        Assert.assertEquals(codegen.modelPackage(), "org.openapitools.model");
+        Assert.assertEquals(codegen.modelPackage(null), "org.openapitools.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "org.openapitools.model");
         Assert.assertEquals(codegen.apiPackage(), "org.openapitools.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "org.openapitools.api");
@@ -96,7 +96,7 @@ public class JavaCXFClientCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.TRUE);
         Assert.assertTrue(codegen.isHideGenerationTimestamp());
-        Assert.assertEquals(codegen.modelPackage(), "org.openapitools.model");
+        Assert.assertEquals(codegen.modelPackage(null), "org.openapitools.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "org.openapitools.model");
         Assert.assertEquals(codegen.apiPackage(), "org.openapitools.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "org.openapitools.api");
@@ -113,7 +113,7 @@ public class JavaCXFClientCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.FALSE);
         Assert.assertFalse(codegen.isHideGenerationTimestamp());
-        Assert.assertEquals(codegen.modelPackage(), "org.openapitools.model");
+        Assert.assertEquals(codegen.modelPackage(null), "org.openapitools.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "org.openapitools.model");
         Assert.assertEquals(codegen.apiPackage(), "org.openapitools.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "org.openapitools.api");

@@ -25,6 +25,7 @@ import org.openapitools.codegen.utils.SemVer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -151,7 +152,7 @@ public class TypeScriptAngularClientCodegen extends AbstractTypeScriptClientCode
     public void processOpts() {
         super.processOpts();
         supportingFiles.add(
-                new SupportingFile("models.mustache", modelPackage().replace('.', File.separatorChar), "models.ts"));
+                new SupportingFile("models.mustache", modelPackage(null).replace('.', File.separatorChar), "models.ts"));
         supportingFiles
                 .add(new SupportingFile("apis.mustache", apiPackage().replace('.', File.separatorChar), "api.ts"));
         supportingFiles.add(new SupportingFile("index.mustache", getIndexDirectory(), "index.ts"));
@@ -630,11 +631,11 @@ public class TypeScriptAngularClientCodegen extends AbstractTypeScriptClientCode
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         if (importMapping.containsKey(name)) {
             return importMapping.get(name);
         }
-        return modelPackage() + "/" + toModelFilename(name).substring(DEFAULT_IMPORT_PREFIX.length());
+        return modelPackage(subpackage) + "/" + toModelFilename(name).substring(DEFAULT_IMPORT_PREFIX.length());
     }
 
     public String getNpmRepository() {

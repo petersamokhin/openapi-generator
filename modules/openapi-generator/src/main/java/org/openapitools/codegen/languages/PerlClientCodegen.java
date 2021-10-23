@@ -27,6 +27,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -227,8 +228,8 @@ public class PerlClientCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String modelFileFolder() {
-        return (outputFolder + "/lib/" + modulePathPart + modelPackage()).replace('/', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return (outputFolder + "/lib/" + modulePathPart + modelPackage(subpackage)).replace('/', File.separatorChar);
     }
 
     @Override

@@ -28,6 +28,7 @@ import org.openapitools.codegen.meta.features.DocumentationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 
 public class CSharpDotNet2ClientCodegen extends AbstractCSharpCodegen {
@@ -110,7 +111,7 @@ public class CSharpDotNet2ClientCodegen extends AbstractCSharpCodegen {
     }
 
     @Override
-    public String modelPackage() {
+    public String modelPackage(@Nullable String subpackage) {
         return packageName + ".Model";
     }
 
@@ -143,8 +144,8 @@ public class CSharpDotNet2ClientCodegen extends AbstractCSharpCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage(subpackage).replace('.', File.separatorChar);
     }
 
     @Override

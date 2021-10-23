@@ -28,6 +28,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -229,7 +230,7 @@ public class LuaClientCodegen extends DefaultCodegen implements CodegenConfig {
         return outputFolder + File.separator + packageName + File.separator + "api" + File.separator;
     }
 
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + packageName + File.separator + "model" + File.separator;
     }
 
@@ -452,7 +453,7 @@ public class LuaClientCodegen extends DefaultCodegen implements CodegenConfig {
     public Map<String, Object> postProcessModels(Map<String, Object> objs) {
         // remove model imports to avoid error
         List<Map<String, String>> imports = (List<Map<String, String>>) objs.get("imports");
-        final String prefix = modelPackage();
+        final String prefix = modelPackage(null);
         Iterator<Map<String, String>> iterator = imports.iterator();
         while (iterator.hasNext()) {
             String _import = iterator.next().get("import");
@@ -575,7 +576,7 @@ public class LuaClientCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         if (needToImport(toModelName(name))) {
             return toModelName(name);
         }

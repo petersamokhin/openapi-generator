@@ -26,6 +26,7 @@ import org.openapitools.codegen.CodegenType;
 import org.openapitools.codegen.SupportingFile;
 import org.openapitools.codegen.meta.features.*;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
@@ -159,7 +160,7 @@ public class AdaCodegen extends AbstractAdaCodegen implements CodegenConfig {
     }
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + "model" + File.separator + modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + "model" + File.separator + modelPackage(subpackage).replace('.', File.separatorChar);
     }
 }

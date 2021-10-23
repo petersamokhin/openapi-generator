@@ -75,6 +75,8 @@ import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.servers.ServerVariable;
 import io.swagger.v3.parser.util.SchemaTypeUtil;
 
+import javax.annotation.Nullable;
+
 import static org.openapitools.codegen.utils.OnceLogger.once;
 import static org.openapitools.codegen.utils.StringUtils.*;
 
@@ -430,7 +432,7 @@ public class DefaultCodegen implements CodegenConfig {
                 List<Map<String, String>> importsValue = new ArrayList<>();
                 Map<String, Object> objsValue = new HashMap<>();
                 objsValue.put("models", Collections.singletonList(modelValue));
-                objsValue.put("package", modelPackage());
+                objsValue.put("package", modelPackage(null));
                 objsValue.put("imports", importsValue);
                 objsValue.put("classname", cm.classname);
                 objsValue.putAll(additionalProperties);
@@ -1043,7 +1045,7 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String modelPackage() {
+    public String modelPackage(@Nullable String subpackage) {
         return modelPackage;
     }
 
@@ -1112,8 +1114,8 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + modelPackage(subpackage).replace('.', File.separatorChar);
     }
 
     @Override
@@ -1494,14 +1496,15 @@ public class DefaultCodegen implements CodegenConfig {
      * Return the fully-qualified "Model" name for import
      *
      * @param name the name of the "Model"
+     *@param subpackage {@link ModelUtils#getModelSubpackages}
      * @return the fully-qualified "Model" name for import
      */
     @Override
-    public String toModelImport(String name) {
-        if ("".equals(modelPackage())) {
+    public String toModelImport(String name, @Nullable String subpackage) {
+        if ("".equals(modelPackage(subpackage))) {
             return name;
         } else {
-            return modelPackage() + "." + name;
+            return modelPackage(subpackage) + "." + name;
         }
     }
 
@@ -1509,11 +1512,12 @@ public class DefaultCodegen implements CodegenConfig {
      * Returns the same content as [[toModelImport]] with key the fully-qualified Model name and value the initial input.
      * In case of union types this method has a key for each separate model and import.
      * @param name the name of the "Model"
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      * @return Map of fully-qualified models.
      */
     @Override
-    public Map<String,String> toModelImportMap(String name){
-        return Collections.singletonMap(this.toModelImport(name),name);
+    public Map<String,String> toModelImportMap(String name, @Nullable String subpackage){
+        return Collections.singletonMap(this.toModelImport(name, subpackage),name);
     }
 
     /**
@@ -5270,9 +5274,9 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String modelFilename(String templateName, String modelName) {
+    public String modelFilename(String templateName, String modelName, @Nullable String subpackage) {
         String suffix = modelTemplateFiles().get(templateName);
-        return modelFileFolder() + File.separator + toModelFilename(modelName) + suffix;
+        return modelFileFolder(subpackage) + File.separator + toModelFilename(modelName) + suffix;
     }
 
     /**

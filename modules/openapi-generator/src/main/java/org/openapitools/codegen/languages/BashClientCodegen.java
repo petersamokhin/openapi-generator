@@ -34,6 +34,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 import static org.openapitools.codegen.utils.StringUtils.*;
@@ -382,9 +383,10 @@ public class BashClientCodegen extends DefaultCodegen implements CodegenConfig {
     /**
      * Location to write model files.  You can use the modelPackage() as defined
      * when the class is instantiated.
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      */
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder;
     }
 

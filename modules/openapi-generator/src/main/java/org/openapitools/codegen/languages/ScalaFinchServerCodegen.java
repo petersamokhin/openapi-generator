@@ -25,6 +25,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -127,7 +128,7 @@ public class ScalaFinchServerCodegen extends DefaultCodegen implements CodegenCo
         typeMapping.put("Date", "LocalDateTime");
         typeMapping.put("DateTime", "ZonedDateTime");
 
-        additionalProperties.put("modelPackage", modelPackage());
+        additionalProperties.put("modelPackage", modelPackage(null));
         additionalProperties.put("apiPackage", apiPackage());
         additionalProperties.put("appName", "OpenAPI Sample");
         additionalProperties.put("appDescription", "A sample openapi server");
@@ -224,8 +225,8 @@ public class ScalaFinchServerCodegen extends DefaultCodegen implements CodegenCo
     }
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage(subpackage).replace('.', File.separatorChar);
     }
 
     @SuppressWarnings("unchecked")

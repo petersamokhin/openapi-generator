@@ -78,7 +78,7 @@ public class FSharpServerCodegenTest {
           final AbstractFSharpCodegen codegen = new FsharpGiraffeServerCodegen();
           codegen.setPackageName("MyNamespace");
           codegen.setModelPackage("Model");
-          String modified = codegen.toModelImport("Foo");
+          String modified = codegen.toModelImport("Foo", null);
           Assert.assertEquals(modified, "MyNamespace.Model.Foo");
     }
 

@@ -25,6 +25,7 @@ import org.openapitools.codegen.meta.GeneratorMetadata;
 import org.openapitools.codegen.meta.Stability;
 import org.openapitools.codegen.utils.ModelUtils;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -278,14 +279,14 @@ public class CppUE4ClientCodegen extends AbstractCppCodegen {
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         if (namespaces.containsKey(name)) {
             return "using " + namespaces.get(name) + ";";
         } else if (systemIncludes.contains(name)) {
             return "#include <" + name + ">";
         }
 
-        String folder = modelPackage().replace("::", File.separator);
+        String folder = modelPackage(subpackage).replace("::", File.separator);
         if (!folder.isEmpty())
             folder += File.separator;
 
@@ -318,10 +319,11 @@ public class CppUE4ClientCodegen extends AbstractCppCodegen {
     /**
      * Location to write model files.  You can use the modelPackage() as defined when the class is
      * instantiated
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      */
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + modelPackage().replace("::", File.separator);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + modelPackage(subpackage).replace("::", File.separator);
     }
 
     /**
@@ -334,14 +336,14 @@ public class CppUE4ClientCodegen extends AbstractCppCodegen {
     }
 
     @Override
-    public String modelFilename(String templateName, String modelName) {
+    public String modelFilename(String templateName, String modelName, @Nullable String subpackage) {
         String suffix = modelTemplateFiles().get(templateName);
         String folder = privateFolder;
         if (".h".equals(suffix)) {
             folder = publicFolder;
         }
 
-        return modelFileFolder() + File.separator + folder + File.separator + toModelFilename(modelName) + suffix;
+        return modelFileFolder(subpackage) + File.separator + folder + File.separator + toModelFilename(modelName) + suffix;
     }
 
     @Override

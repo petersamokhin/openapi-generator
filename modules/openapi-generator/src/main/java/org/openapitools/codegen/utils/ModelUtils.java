@@ -71,6 +71,8 @@ public class ModelUtils {
 
     private static ObjectMapper JSON_MAPPER, YAML_MAPPER;
 
+    private static final String vendorExtensionModelSubpackage = "x-subpackage";
+
     static {
         JSON_MAPPER = ObjectMapperFactory.createJson();
         YAML_MAPPER = ObjectMapperFactory.createYaml();
@@ -1671,5 +1673,20 @@ public class ModelUtils {
         //GlobalSettings.setProperty(openapiDocVersion, version);
 
         return new SemVer(version);
+    }
+
+    /**
+     * Extracts all the subpackages specified in any models in the schemas.
+     * @param schemas All OpenAPI schemas
+     * @return Map {modelName=subpackage}, only if {@link #vendorExtensionModelSubpackage} is specified in the model.
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static Map<String, String> getModelSubpackages(Map<String, Schema> schemas) {
+        return schemas.entrySet().stream()
+            .filter(entry -> {
+                Map<String, ?> extensions = entry.getValue().getExtensions();
+                return extensions != null && extensions.get(vendorExtensionModelSubpackage) instanceof String;
+            })
+            .collect(Collectors.toMap(Map.Entry::getKey, v -> (String) v.getValue().getExtensions().get(vendorExtensionModelSubpackage)));
     }
 }
