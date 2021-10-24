@@ -883,7 +883,10 @@ public class DefaultGenerator implements Generator {
 
         // resolve inline models
         InlineModelResolver inlineModelResolver = new InlineModelResolver();
-        inlineModelResolver.flatten(openAPI);
+        inlineModelResolver.flatten(
+            openAPI,
+            Boolean.parseBoolean(GlobalSettings.getProperty(CodegenConstants.SKIP_FLATTEN_COMPOSED_CHILDREN, "false"))
+        );
 
         configureGeneratorProperties();
         configureOpenAPIInfo();

@@ -531,6 +531,12 @@ public class DefaultCodegen implements CodegenConfig {
         for (CodegenModel cm : allModels.values()) {
             if (cm.getParent() != null) {
                 cm.setParentModel(allModels.get(cm.getParent()));
+
+                if (cm.getParentModel().getDiscriminator() != null) {
+                    cm.setDiscriminatorChildMappingName(
+                        cm.getParentModel().getDiscriminator().getMappedModelsMapping().get(cm.getName())
+                    );
+                }
             }
             if (cm.getInterfaces() != null && !cm.getInterfaces().isEmpty()) {
                 cm.setInterfaceModels(new ArrayList<>(cm.getInterfaces().size()));
@@ -1496,7 +1502,7 @@ public class DefaultCodegen implements CodegenConfig {
      * Return the fully-qualified "Model" name for import
      *
      * @param name the name of the "Model"
-     *@param subpackage {@link ModelUtils#getModelSubpackages}
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      * @return the fully-qualified "Model" name for import
      */
     @Override

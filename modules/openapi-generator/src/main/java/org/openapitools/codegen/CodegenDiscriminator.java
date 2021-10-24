@@ -1,9 +1,7 @@
 package org.openapitools.codegen;
 
-import java.util.TreeSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class encapsulates the OpenAPI discriminator construct, as specified at
@@ -86,6 +84,10 @@ public class CodegenDiscriminator {
 
     public void setMappedModels(Set<MappedModel> mappedModels) {
         this.mappedModels = mappedModels;
+    }
+
+    public Map<String, String> getMappedModelsMapping() {
+        return mappedModels.stream().collect(Collectors.toMap(MappedModel::getModelName, MappedModel::getMappingName));
     }
 
     /**

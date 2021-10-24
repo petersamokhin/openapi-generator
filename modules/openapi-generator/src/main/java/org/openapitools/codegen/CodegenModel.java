@@ -44,6 +44,9 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
     public List<CodegenModel> interfaceModels;
     public List<CodegenModel> children;
 
+    // Is set when the parent model is set, used to provide the mapping name in the children models
+    public String discriminatorChildMappingName;
+
     // anyOf, oneOf, allOf
     public Set<String> anyOf = new TreeSet<String>();
     public Set<String> oneOf = new TreeSet<String>();
@@ -418,6 +421,10 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
 
     public void setParentModel(CodegenModel parentModel) {
         this.parentModel = parentModel;
+    }
+
+    public void setDiscriminatorChildMappingName(String discriminatorChildMappingName) {
+        this.discriminatorChildMappingName = discriminatorChildMappingName;
     }
 
     public String getParentSchema() {
@@ -1052,6 +1059,43 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
         allVars = removeDuplicatedProperty(allVars);
         readOnlyVars = removeDuplicatedProperty(readOnlyVars);
         readWriteVars = removeDuplicatedProperty(readWriteVars);
+    }
+
+    public void removeDiscriminatorPropertyFromEverywhere() {
+        vars = removeDiscriminatorProperty(vars);
+        optionalVars = removeDiscriminatorProperty(optionalVars);
+        requiredVars = removeDiscriminatorProperty(requiredVars);
+        parentVars = removeDiscriminatorProperty(parentVars);
+        allVars = removeDiscriminatorProperty(allVars);
+        readOnlyVars = removeDiscriminatorProperty(readOnlyVars);
+        readWriteVars = removeDiscriminatorProperty(readWriteVars);
+    }
+
+    private List<CodegenProperty> removeDiscriminatorProperty(List<CodegenProperty> vars) {
+        // find discriminator property name
+        final String discriminatorPropertyBaseName;
+
+        if (discriminator != null) {
+            discriminatorPropertyBaseName = discriminator.getPropertyBaseName();
+        } else if (getParentModel() != null && getParentModel().getDiscriminator() != null) {
+            discriminatorPropertyBaseName = getParentModel().getDiscriminator().getPropertyBaseName();
+        } else {
+            discriminatorPropertyBaseName = null;
+        }
+
+        if (discriminatorPropertyBaseName == null) {
+            return vars;
+        }
+
+        // clone the list first
+        List<CodegenProperty> newList = new ArrayList<>();
+        for (CodegenProperty cp : vars) {
+            newList.add(cp.clone());
+        }
+
+        newList.removeIf(element -> Objects.equals(element.baseName, discriminatorPropertyBaseName));
+
+        return newList;
     }
 
     private List<CodegenProperty> removeDuplicatedProperty(List<CodegenProperty> vars) {
