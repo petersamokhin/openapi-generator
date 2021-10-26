@@ -530,11 +530,12 @@ public class DefaultCodegen implements CodegenConfig {
         // Fix up all parent and interface CodegenModel references.
         for (CodegenModel cm : allModels.values()) {
             if (cm.getParent() != null) {
-                cm.setParentModel(allModels.get(cm.getParent()));
+                CodegenModel parentModel = allModels.get(cm.getParent());
+                cm.setParentModel(parentModel);
 
-                if (cm.getParentModel().getDiscriminator() != null) {
+                if (parentModel != null && parentModel.getDiscriminator() != null) {
                     cm.setDiscriminatorChildMappingName(
-                        cm.getParentModel().getDiscriminator().getMappedModelsMapping().get(cm.getName())
+                        parentModel.getDiscriminator().getMappedModelsMapping().get(cm.getName())
                     );
                 }
             }
@@ -2803,6 +2804,7 @@ public class DefaultCodegen implements CodegenConfig {
             for (CodegenProperty prop : m.allVars) {
                 postProcessModelProperty(m, prop);
             }
+            m.hasAllVars = m.allVars.size() > 0;
         }
         return m;
     }
@@ -5097,6 +5099,7 @@ public class DefaultCodegen implements CodegenConfig {
         m.hasRequired = false;
         if (properties != null && !properties.isEmpty()) {
             m.hasVars = true;
+            m.hasAllVars = true;
             m.hasEnums = false; // TODO need to fix as its false in both cases
 
             Set<String> mandatory = required == null ? Collections.<String>emptySet()
@@ -5108,6 +5111,7 @@ public class DefaultCodegen implements CodegenConfig {
         } else {
             m.emptyVars = true;
             m.hasVars = false;
+            m.hasAllVars = m.parentVars != null && m.parentVars.size() > 0;
             m.hasEnums = false; // TODO need to fix as its false in both cases
         }
 

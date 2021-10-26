@@ -1708,7 +1708,7 @@ public class DefaultCodegenTest {
     @Test
     public void testNullableProperty() {
         final OpenAPI openAPI = TestUtils.parseFlattenSpec("src/test/resources/3_0/examples.yaml");
-        new InlineModelResolver().flatten(openAPI, true);
+        new InlineModelResolver().flatten(openAPI, false);
         final DefaultCodegen codegen = new DefaultCodegen();
         codegen.setOpenAPI(openAPI);
 
@@ -1720,7 +1720,7 @@ public class DefaultCodegenTest {
     @Test
     public void testDeprecatedModel() {
         final OpenAPI openAPI = TestUtils.parseFlattenSpec("src/test/resources/3_0/component-deprecated.yml");
-        new InlineModelResolver().flatten(openAPI, true);
+        new InlineModelResolver().flatten(openAPI, false);
         final DefaultCodegen codegen = new DefaultCodegen();
 
         CodegenModel codegenPetModel = codegen.fromModel("Pet", openAPI.getComponents().getSchemas().get("Pet"));
@@ -1733,7 +1733,7 @@ public class DefaultCodegenTest {
     @Test
     public void testDeprecatedProperty() {
         final OpenAPI openAPI = TestUtils.parseFlattenSpec("src/test/resources/3_0/property-deprecated.yaml");
-        new InlineModelResolver().flatten(openAPI, true);
+        new InlineModelResolver().flatten(openAPI, false);
         final DefaultCodegen codegen = new DefaultCodegen();
         codegen.setOpenAPI(openAPI);
 
@@ -1749,7 +1749,7 @@ public class DefaultCodegenTest {
     @Test
     public void testDeprecatedRef() {
         final OpenAPI openAPI = TestUtils.parseSpec("src/test/resources/3_0/model-deprecated.yaml");
-        new InlineModelResolver().flatten(openAPI, true);
+        new InlineModelResolver().flatten(openAPI, false);
         final DefaultCodegen codegen = new DefaultCodegen();
         codegen.setOpenAPI(openAPI);
 
@@ -1922,7 +1922,7 @@ public class DefaultCodegenTest {
     @Test
     public void testAlias() {
         final OpenAPI openAPI = TestUtils.parseFlattenSpec("src/test/resources/3_0/type_alias.yaml");
-        new InlineModelResolver().flatten(openAPI, true);
+        new InlineModelResolver().flatten(openAPI, false);
 
         final DefaultCodegen codegen = new DefaultCodegen();
         codegen.setOpenAPI(openAPI);
@@ -2024,7 +2024,7 @@ public class DefaultCodegenTest {
     @Test
     public void objectQueryParamIdentifyAsObject() {
         final OpenAPI openAPI = TestUtils.parseFlattenSpec("src/test/resources/3_0/objectQueryParam.yaml");
-        new InlineModelResolver().flatten(openAPI, true);
+        new InlineModelResolver().flatten(openAPI, false);
         final DefaultCodegen codegen = new DefaultCodegen();
         codegen.setOpenAPI(openAPI);
 
@@ -2129,7 +2129,7 @@ public class DefaultCodegenTest {
     @Test
     public void arrayInnerReferencedSchemaMarkedAsModel_30() {
         final OpenAPI openAPI = TestUtils.parseFlattenSpec("src/test/resources/3_0/arrayRefBody.yaml");
-        new InlineModelResolver().flatten(openAPI, true);
+        new InlineModelResolver().flatten(openAPI, false);
         final DefaultCodegen codegen = new DefaultCodegen();
         codegen.setOpenAPI(openAPI);
 
@@ -2183,7 +2183,7 @@ public class DefaultCodegenTest {
     public static class FromParameter {
         private CodegenParameter codegenParameter(String path) {
             final OpenAPI openAPI = TestUtils.parseFlattenSpec("src/test/resources/3_0/fromParameter.yaml");
-            new InlineModelResolver().flatten(openAPI, true);
+            new InlineModelResolver().flatten(openAPI, false);
             final DefaultCodegen codegen = new DefaultCodegen();
             codegen.setOpenAPI(openAPI);
 

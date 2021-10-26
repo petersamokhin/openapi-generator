@@ -88,7 +88,7 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
     public Set<String> allMandatory = new TreeSet<String>(); // with parent's required properties
 
     public Set<String> imports = new TreeSet<String>();
-    public boolean hasVars, emptyVars, hasMoreModels, hasEnums, isEnum, hasValidation;
+    public boolean hasVars, hasAllVars, emptyVars, hasMoreModels, hasEnums, isEnum, hasValidation;
     /**
      * Indicates the OAS schema specifies "nullable: true".
      */
@@ -775,6 +775,14 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
         this.hasVars = hasVars;
     }
 
+    public boolean getHasAllVars() {
+        return hasAllVars;
+    }
+
+    public void setHasAllVars(boolean hasAllVars) {
+        this.hasAllVars = hasAllVars;
+    }
+
     @Override
     public boolean getHasRequired() {
         return this.hasRequired;
@@ -836,6 +844,8 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
                 isDate == that.isDate &&
                 isDateTime == that.isDateTime &&
                 hasVars == that.hasVars &&
+                hasAllVars == that.hasAllVars &&
+                Objects.equals(discriminatorChildMappingName, that.discriminatorChildMappingName) &&
                 emptyVars == that.emptyVars &&
                 hasMoreModels == that.hasMoreModels &&
                 hasEnums == that.hasEnums &&
@@ -922,7 +932,7 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
                 getArrayModelType(), isAlias, isString, isInteger, isLong, isNumber, isNumeric, isFloat, isDouble,
                 isDate, isDateTime, isNull, hasValidation, isShort, isUnboundedInteger, isBoolean,
                 getVars(), getAllVars(), getRequiredVars(), getOptionalVars(), getReadOnlyVars(), getReadWriteVars(),
-                getParentVars(), getAllowableValues(), getMandatory(), getAllMandatory(), getImports(), hasVars,
+                getParentVars(), getAllowableValues(), getMandatory(), getAllMandatory(), getImports(), hasVars, hasAllVars, discriminatorChildMappingName,
                 isEmptyVars(), hasMoreModels, hasEnums, isEnum, isNullable, hasRequired, hasOptional, isArray,
                 hasChildren, isMap, isDeprecated, hasOnlyReadOnly, getExternalDocumentation(), getVendorExtensions(),
                 getAdditionalPropertiesType(), getMaxProperties(), getMinProperties(), getUniqueItems(), getMaxItems(),
@@ -988,6 +998,7 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
         sb.append(", allMandatory=").append(allMandatory);
         sb.append(", imports=").append(imports);
         sb.append(", hasVars=").append(hasVars);
+        sb.append(", hasAllVars=").append(hasAllVars);
         sb.append(", emptyVars=").append(emptyVars);
         sb.append(", hasMoreModels=").append(hasMoreModels);
         sb.append(", hasEnums=").append(hasEnums);

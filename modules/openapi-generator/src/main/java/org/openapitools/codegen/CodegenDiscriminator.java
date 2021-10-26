@@ -87,7 +87,7 @@ public class CodegenDiscriminator {
     }
 
     public Map<String, String> getMappedModelsMapping() {
-        return mappedModels.stream().collect(Collectors.toMap(MappedModel::getModelName, MappedModel::getMappingName));
+        return mappedModels.stream().collect(Collectors.toMap(MappedModel::getModelName, MappedModel::getMappingName, (v1, v2) -> v1));
     }
 
     /**

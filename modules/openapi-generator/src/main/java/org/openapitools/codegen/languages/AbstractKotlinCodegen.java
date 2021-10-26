@@ -1046,10 +1046,23 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     public Map<String, Object> updateAllModels(Map<String, Object> objs) {
         Map<String, Object> superResult = super.updateAllModels(objs);
 
-        if (removeDiscriminatorPropertyFromModels) {
-            for (CodegenModel cm : getAllModels(superResult).values()) {
+        for (CodegenModel cm : getAllModels(superResult).values()) {
+            if (removeDiscriminatorPropertyFromModels) {
                 cm.removeDiscriminatorPropertyFromEverywhere();
+                if (cm.vars != null) {
+                    cm.hasVars = cm.vars.size() > 0;
+                }
+                if (cm.allVars != null) {
+                    cm.hasAllVars = cm.allVars.size() > 0;
+                }
             }
+
+            cm.vendorExtensions.put(
+                "x-has-data-class-body",
+                isSerializableModel()
+                    || (cm.getDiscriminator() != null && cm.getHasVars())
+                    || (cm.getAllVars().stream().anyMatch(v -> v.isEnum))
+            );
         }
 
         return objs;
