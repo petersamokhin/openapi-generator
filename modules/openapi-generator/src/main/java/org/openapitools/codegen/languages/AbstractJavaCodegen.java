@@ -18,6 +18,7 @@
 package org.openapitools.codegen.languages;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
@@ -165,9 +166,7 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
                         "native", "super", "while", "null")
         );
 
-        languageSpecificPrimitives = new HashSet<String>(
-                Arrays.asList(
-                        "String",
+        languageSpecificPrimitives = Sets.newHashSet("String",
                         "boolean",
                         "Boolean",
                         "Double",
@@ -175,7 +174,7 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
                         "Long",
                         "Float",
                         "Object",
-                        "byte[]")
+                        "byte[]"
         );
         instantiationTypes.put("array", "ArrayList");
         instantiationTypes.put("set", "LinkedHashSet");
@@ -509,6 +508,7 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
         // optional jackson mappings for BigDecimal support
         importMapping.put("ToStringSerializer", "com.fasterxml.jackson.databind.ser.std.ToStringSerializer");
         importMapping.put("JsonSerialize", "com.fasterxml.jackson.databind.annotation.JsonSerialize");
+        importMapping.put("JsonDeserialize", "com.fasterxml.jackson.databind.annotation.JsonDeserialize");
 
         // imports for pojos
         importMapping.put("ApiModelProperty", "io.swagger.annotations.ApiModelProperty");
@@ -714,7 +714,7 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
         }
 
         // If name contains special chars -> replace them.
-        if ((((CharSequence) name).chars().anyMatch(character -> specialCharReplacements.keySet().contains("" + ((char) character))))) {
+        if ((((CharSequence) name).chars().anyMatch(character -> specialCharReplacements.containsKey(String.valueOf((char) character))))) {
             List<String> allowedCharacters = new ArrayList<>();
             allowedCharacters.add("_");
             allowedCharacters.add("$");
@@ -997,7 +997,7 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
      */
     @Override
     public void setParameterExampleValue(CodegenParameter codegenParameter, RequestBody requestBody) {
-        Boolean isModel = (codegenParameter.isModel || (codegenParameter.isContainer && codegenParameter.getItems().isModel));
+        boolean isModel = (codegenParameter.isModel || (codegenParameter.isContainer && codegenParameter.getItems().isModel));
 
         Content content = requestBody.getContent();
 
@@ -1229,6 +1229,8 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
                 model.imports.add("ArrayList");
             } else if ("set".equals(property.containerType)) {
                 model.imports.add("LinkedHashSet");
+                model.imports.add("JsonDeserialize");
+                property.vendorExtensions.put("x-setter-extra-annotation", "@JsonDeserialize(as = LinkedHashSet.class)");
             } else if ("map".equals(property.containerType)) {
                 model.imports.add("HashMap");
             }
@@ -1246,6 +1248,10 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
                 model.getVendorExtensions().put("x-jackson-optional-nullable-helpers", true);
             }
         }
+
+        if (property.isReadOnly) {
+            model.getVendorExtensions().put("x-has-readonly-properties", true);
+        }
     }
 
     @Override
@@ -1261,7 +1267,7 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
             // if the import package happens to be found in the importMapping (key)
             // add the corresponding import package to the list
             if (importMapping.containsKey(_import)) {
-                Map<String, String> newImportMap = new HashMap<String, String>();
+                Map<String, String> newImportMap = new HashMap<>();
                 newImportMap.put("import", importMapping.get(_import));
                 listIterator.add(newImportMap);
             }
@@ -1286,7 +1292,7 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
         Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
         List<CodegenOperation> operationList = (List<CodegenOperation>) operations.get("operation");
         for (CodegenOperation op : operationList) {
-            Collection<String> operationImports = new ConcurrentSkipListSet<String>();
+            Collection<String> operationImports = new ConcurrentSkipListSet<>();
             for (CodegenParameter p : op.allParams) {
                 if (importMapping.containsKey(p.dataType)) {
                     operationImports.add(importMapping.get(p.dataType));
@@ -1315,7 +1321,7 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
                     if (hasBodyParameter(openAPI, operation) || hasFormParameter(openAPI, operation)) {
                         String defaultContentType = hasFormParameter(openAPI, operation) ? "application/x-www-form-urlencoded" : "application/json";
                         List<String> consumes = new ArrayList<>(getConsumesInfo(openAPI, operation));
-                        String contentType = consumes == null || consumes.isEmpty() ? defaultContentType : consumes.get(0);
+                        String contentType = consumes.isEmpty() ? defaultContentType : consumes.get(0);
                         operation.addExtension("x-contentType", contentType);
                     }
                     String accepts = getAccept(openAPI, operation);
@@ -1866,7 +1872,7 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
 
         // only process files with java extension
         if ("java".equals(FilenameUtils.getExtension(file.toString()))) {
-            String command = javaPostProcessFile + " " + file.toString();
+            String command = javaPostProcessFile + " " + file;
             try {
                 Process p = Runtime.getRuntime().exec(command);
                 p.waitFor();

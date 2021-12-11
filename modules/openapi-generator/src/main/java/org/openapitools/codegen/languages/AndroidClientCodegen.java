@@ -118,7 +118,7 @@ public class AndroidClientCodegen extends DefaultCodegen implements CodegenConfi
                         "native", "super", "while", "null")
         );
 
-        languageSpecificPrimitives = new HashSet<String>(
+        languageSpecificPrimitives = new HashSet<>(
                 Arrays.asList(
                         "String",
                         "boolean",
