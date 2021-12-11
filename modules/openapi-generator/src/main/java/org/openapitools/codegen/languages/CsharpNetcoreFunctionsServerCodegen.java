@@ -32,6 +32,8 @@ import org.openapitools.codegen.meta.Stability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+
 public class CsharpNetcoreFunctionsServerCodegen extends CSharpNetCoreReducedClientCodegen {
     public static final String PROJECT_NAME = "projectName";
 
@@ -88,7 +90,7 @@ public class CsharpNetcoreFunctionsServerCodegen extends CSharpNetCoreReducedCli
     }
 
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + "generatedSrc" + File.separator + "Models";
     }
 

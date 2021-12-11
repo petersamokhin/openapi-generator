@@ -673,7 +673,7 @@ public class RClientCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + testFolder;
     }
 

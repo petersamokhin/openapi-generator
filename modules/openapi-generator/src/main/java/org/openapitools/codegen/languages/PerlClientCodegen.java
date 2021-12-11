@@ -238,7 +238,7 @@ public class PerlClientCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return (outputFolder + "/t").replace('/', File.separatorChar);
     }
 

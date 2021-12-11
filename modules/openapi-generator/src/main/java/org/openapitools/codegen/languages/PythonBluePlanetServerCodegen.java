@@ -21,6 +21,7 @@ import org.openapitools.codegen.meta.features.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.EnumSet;
 
@@ -246,7 +247,7 @@ public class PythonBluePlanetServerCodegen extends AbstractPythonConnexionServer
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + modelTestPath + File.separator + "ddui-views";
     }
 

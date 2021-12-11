@@ -400,7 +400,7 @@ public class JavascriptClientCodegen extends DefaultCodegen implements CodegenCo
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return createPath(outputFolder, "test", invokerPackage, modelTestPath);
     }
 

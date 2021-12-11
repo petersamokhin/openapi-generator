@@ -162,6 +162,15 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
     private boolean hasRequiredVars;
     private boolean hasDiscriminatorWithNonEmptyMapping;
     private boolean isAnyType;
+    private String jsonExample;
+
+    public String getJsonExample() {
+        return jsonExample;
+    }
+
+    public void setJsonExample(String jsonExample) {
+        this.jsonExample = jsonExample;
+    }
 
     public String getAdditionalPropertiesType() {
         return additionalPropertiesType;

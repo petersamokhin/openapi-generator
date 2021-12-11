@@ -312,7 +312,7 @@ public abstract class AbstractDartCodegen extends DefaultCodegen {
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + modelTestPath.replace('/', File.separatorChar);
     }
 

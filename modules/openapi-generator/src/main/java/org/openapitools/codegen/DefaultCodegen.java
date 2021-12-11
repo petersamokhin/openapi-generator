@@ -17,6 +17,8 @@
 
 package org.openapitools.codegen;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Ticker;
@@ -26,6 +28,9 @@ import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Mustache.Compiler;
 import com.samskivert.mustache.Mustache.Lambda;
 
+import io.swagger.oas.inflector.examples.ExampleBuilder;
+import io.swagger.oas.inflector.processors.JsonNodeExampleSerializer;
+import io.swagger.v3.parser.OpenAPIV3Parser;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -1142,7 +1147,7 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + testPackage().replace('.', File.separatorChar);
     }
 
@@ -2805,6 +2810,14 @@ public class DefaultCodegen implements CodegenConfig {
                 postProcessModelProperty(m, prop);
             }
             m.hasAllVars = m.allVars.size() > 0;
+        }
+        try {
+            String exampleJson = Json.mapper()
+                .registerModule(new SimpleModule().addSerializer(new JsonNodeExampleSerializer()))
+                    .writeValueAsString(ExampleBuilder.fromSchema(schema, this.openAPI.getComponents().getSchemas()));
+            m.setJsonExample(exampleJson);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
         return m;
     }

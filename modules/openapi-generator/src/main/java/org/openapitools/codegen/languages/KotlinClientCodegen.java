@@ -167,6 +167,7 @@ public class KotlinClientCodegen extends AbstractKotlinCodegen {
 
         outputFolder = "generated-code" + File.separator + "kotlin-client";
         modelTemplateFiles.put("model.mustache", ".kt");
+        modelTestTemplateFiles.put("model_test.mustache", ".kt");
         apiTemplateFiles.put("api.mustache", ".kt");
         modelDocTemplateFiles.put("model_doc.mustache", ".md");
         apiDocTemplateFiles.put("api_doc.mustache", ".md");
@@ -304,6 +305,7 @@ public class KotlinClientCodegen extends AbstractKotlinCodegen {
 
         if (MULTIPLATFORM.equals(getLibrary())) {
             sourceFolder = "src/commonMain/kotlin";
+            testFolder = "src/commonTest/kotlin";
         }
 
 

@@ -504,7 +504,7 @@ public class PhpSymfonyServerCodegen extends AbstractPhpCodegen implements Codeg
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return (outputFolder + File.separator + toSrcPath(modelTestsPackage, srcBasePath));
     }
 

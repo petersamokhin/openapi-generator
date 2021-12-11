@@ -12,6 +12,7 @@ import org.openapitools.codegen.meta.features.SecurityFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -292,7 +293,7 @@ public class JavaMicronautClientCodegen extends AbstractJavaCodegen implements B
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         if (testTool.equals(OPT_TEST_SPOCK)) {
             return getOutputDir() + "/src/test/groovy/" + getInvokerPackage().replaceAll("\\.", "/") + "/model";
         }

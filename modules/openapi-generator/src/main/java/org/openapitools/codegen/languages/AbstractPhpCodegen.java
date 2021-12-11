@@ -282,7 +282,7 @@ public abstract class AbstractPhpCodegen extends DefaultCodegen implements Codeg
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return (outputFolder + File.separator + testBasePath + File.separator + modelDirName);
     }
 

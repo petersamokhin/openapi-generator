@@ -334,18 +334,21 @@ public class DefaultGenerator implements Generator {
         }
     }
 
-    private void generateModelTests(List<File> files, Map<String, Object> models, String modelName) throws IOException {
+    private void generateModelTests(List<File> files, Map<String, Object> models, String modelName, Map<String, String> modelsSubpackages) throws IOException {
         // to generate model test files
         for (Map.Entry<String, String> configModelTestTemplateFilesEntry : config.modelTestTemplateFiles().entrySet()) {
             String templateName = configModelTestTemplateFilesEntry.getKey();
             String suffix = configModelTestTemplateFilesEntry.getValue();
-            String filename = config.modelTestFileFolder() + File.separator + config.toModelTestFilename(modelName) + suffix;
+            String filename = config.modelTestFileFolder(modelsSubpackages.get(modelName)) + File.separator + config.toModelTestFilename(modelName) + suffix;
+            CodegenModel model = ModelUtils.extractModelFromModels(models);
 
             if (generateModelTests) {
                 // do not overwrite test file that already exists (regardless of config's skipOverwrite setting)
                 File modelTestFile = new File(filename);
                 if (modelTestFile.exists()) {
                     this.templateProcessor.skip(modelTestFile.toPath(), "Test files never overwrite an existing file of the same name.");
+                } if (model != null && model.getDiscriminator() != null) {
+                    this.templateProcessor.skip(modelTestFile.toPath(), "Test files are not generated for the parent (abstract) items.");
                 } else {
                     File written = processTemplateToFile(models, templateName, filename, generateModelTests, CodegenConstants.MODEL_TESTS);
                     if (written != null) {
@@ -539,7 +542,7 @@ public class DefaultGenerator implements Generator {
                 generateModel(files, models, modelName, modelsSubpackages);
 
                 // to generate model test files
-                generateModelTests(files, models, modelName);
+                generateModelTests(files, models, modelName, modelsSubpackages);
 
                 // to generate model documentation files
                 generateModelDocumentation(files, models, modelName);

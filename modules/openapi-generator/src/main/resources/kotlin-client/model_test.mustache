@@ -1,0 +1,35 @@
+{{>licenseInfo}}
+package {{modelPackage}}
+
+{{#multiplatform}}import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlin.test.Test
+import kotlin.test.assertEquals{{/multiplatform}}
+{{#models}}{{#model}}
+internal class {{classname}}Test { {{#multiplatform}}
+{{#isAlias}}/* alias: nothing to test */{{/isAlias}}{{#isEnum}}
+    @Test
+    fun testEnumValuesJson() {
+        val expectedValues: List<{{classname}}> = {{classname}}.values().toList()
+        val jsonValues: String = Json.encodeToString(expectedValues)
+        val actualValues: List<{{classname}}> = Json.decodeFromString(jsonValues)
+
+        assertEquals(expectedValues, actualValues)
+    }
+{{/isEnum}}{{^isEnum}}
+    @Test
+    fun testSerializeDeserialize() {
+        val json = Json { ignoreUnknownKeys = true }
+        val jsonExample = """{{jsonExample}}"""
+
+        val deserializedValue: {{classname}} = json.decodeFromString(jsonExample)
+        val serializedValue: String = json.encodeToString(deserializedValue)
+        val twiceDeserializedValue: {{classname}} = json.decodeFromString(serializedValue)
+
+        assertEquals(deserializedValue, twiceDeserializedValue)
+    }
+{{/isEnum}}{{/multiplatform}}
+}
+{{/model}}
+{{/models}}

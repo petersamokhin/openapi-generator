@@ -875,7 +875,7 @@ public class PowerShellClientCodegen extends DefaultCodegen implements CodegenCo
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return (outputFolder + "/" + modelTestPath).replace('/', File.separatorChar);
     }
 
