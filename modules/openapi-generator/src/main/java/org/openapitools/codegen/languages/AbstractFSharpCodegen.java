@@ -923,7 +923,7 @@ public abstract class AbstractFSharpCodegen extends DefaultCodegen implements Co
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + testFolder;
     }
 

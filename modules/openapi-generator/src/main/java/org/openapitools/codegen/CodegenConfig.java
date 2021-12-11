@@ -74,7 +74,7 @@ public interface CodegenConfig {
 
     String modelFileFolder(@Nullable String subpackage);
 
-    String modelTestFileFolder();
+    String modelTestFileFolder(@Nullable String subpackage);
 
     String modelDocFileFolder();
 

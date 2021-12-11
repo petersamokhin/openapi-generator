@@ -347,7 +347,7 @@ public class AbstractJavaCodegenTest {
         codegen.setOutputDir("/User/open.api.tools");
         codegen.setTestFolder("test.folder");
         codegen.setModelPackage("org.openapitools.codegen.model");
-        Assert.assertEquals(codegen.modelTestFileFolder(), "/User/open.api.tools/test.folder/org/openapitools/codegen/model".replace('/', File.separatorChar));
+        Assert.assertEquals(codegen.modelTestFileFolder(null), "/User/open.api.tools/test.folder/org/openapitools/codegen/model".replace('/', File.separatorChar));
     }
 
     @Test

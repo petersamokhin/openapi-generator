@@ -391,6 +391,11 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     }
 
     @Override
+    public String modelTestFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + testFolder + File.separator + modelPackage(subpackage).replace('.', File.separatorChar);
+    }
+
+    @Override
     public Map<String, Object> postProcessModels(Map<String, Object> objs) {
         objs = super.postProcessModelsEnum(objs);
         List<Object> models = (List<Object>) objs.get("models");

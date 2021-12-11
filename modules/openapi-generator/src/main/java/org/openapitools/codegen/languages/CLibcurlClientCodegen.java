@@ -387,7 +387,7 @@ public class CLibcurlClientCodegen extends DefaultCodegen implements CodegenConf
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + "unit-test";
     }
 

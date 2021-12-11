@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.io.FileUtils;
 
+import javax.annotation.Nullable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URI;
@@ -123,6 +124,25 @@ public class ModelUtils {
                 }
             }
         }
+        return null;
+    }
+
+    @Nullable
+    public static CodegenModel extractModelFromModels(final Map<String, Object> models) {
+        final Object anyList = models.get("models");
+
+        if (anyList instanceof List && ((List<?>) anyList).size() > 0) {
+            final Object innerMap = ((List<?>) anyList).get(0);
+
+            if (innerMap instanceof Map) {
+                final Object anyModel = ((Map<String, ?>) innerMap).get("model");
+
+                if (anyModel != null && anyModel instanceof CodegenModel) {
+                    return (CodegenModel) anyModel;
+                }
+            }
+        }
+
         return null;
     }
 

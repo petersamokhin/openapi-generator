@@ -1,6 +1,7 @@
 package org.openapitools.codegen;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.api.TemplatePathLocator;
 import org.openapitools.codegen.api.TemplateProcessor;
@@ -252,7 +253,10 @@ public class TemplateManager implements TemplatingExecutor, TemplateProcessor {
             File parent = Paths.get(output.getParent()).toFile();
             parent.mkdirs();
         }
-        Files.write(output.toPath(), contents);
+        byte[] escapedContents = StringEscapeUtils.unescapeHtml(new String(contents, StandardCharsets.UTF_8))
+            .getBytes(StandardCharsets.UTF_8);
+
+        Files.write(output.toPath(), escapedContents);
 
         return output;
     }

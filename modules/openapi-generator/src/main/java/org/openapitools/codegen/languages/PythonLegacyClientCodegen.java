@@ -401,7 +401,7 @@ public class PythonLegacyClientCodegen extends AbstractPythonCodegen implements 
     }
 
     @Override
-    public String modelTestFileFolder() {
+    public String modelTestFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separatorChar + testFolder;
     }
 
