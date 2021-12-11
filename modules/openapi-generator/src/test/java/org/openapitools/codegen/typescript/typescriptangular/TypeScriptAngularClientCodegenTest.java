@@ -269,7 +269,7 @@ public class TypeScriptAngularClientCodegenTest {
         final String importedModel = "SharedApiModel";
         final String importName = "@lib/custom/model";
         codegen.importMapping().put(importedModel, importName);
-        Assert.assertEquals(codegen.toModelImport(importedModel), importName);
+        Assert.assertEquals(codegen.toModelImport(importedModel, null), importName);
     }
 
     @Test

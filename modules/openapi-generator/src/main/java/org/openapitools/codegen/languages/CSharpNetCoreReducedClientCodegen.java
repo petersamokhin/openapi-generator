@@ -28,6 +28,8 @@ import org.openapitools.codegen.utils.ProcessUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+import javax.validation.constraints.Null;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -457,8 +459,8 @@ public class CSharpNetCoreReducedClientCodegen extends AbstractCSharpCodegen {
     }
 
     @Override
-    public String modelTestFileFolder() {
-        return outputFolder + File.separator + testFolder + File.separator + testPackageName() + File.separator + modelPackage();
+    public String modelTestFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + testFolder + File.separator + testPackageName() + File.separator + modelPackage(subpackage);
     }
 
     @Override
