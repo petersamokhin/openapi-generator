@@ -1095,7 +1095,7 @@ public class ModelUtils {
      */
     public static Schema unaliasSchema(OpenAPI openAPI,
                                        Schema schema) {
-        return unaliasSchema(openAPI, schema, Collections.<String, String>emptyMap());
+        return unaliasSchema(openAPI, schema, Collections.emptyMap());
     }
 
     /**
@@ -1280,7 +1280,7 @@ public class ModelUtils {
         } else if (composed.getOneOf() != null && !composed.getOneOf().isEmpty()) {
             return composed.getOneOf();
         } else {
-            return Collections.<Schema>emptyList();
+            return Collections.emptyList();
         }
     }
 

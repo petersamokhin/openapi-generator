@@ -1,5 +1,7 @@
 package org.openapitools.codegen.python;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.openapitools.codegen.languages.AbstractPythonConnexionServerCodegen.MOVE_TESTS_UNDER_PYTHON_SRC_ROOT;
 import static org.openapitools.codegen.languages.AbstractPythonConnexionServerCodegen.PYTHON_SRC_ROOT;
 import static org.openapitools.codegen.languages.AbstractPythonConnexionServerCodegen.USE_PYTHON_SRC_ROOT_IN_IMPORTS;
 
@@ -12,7 +14,6 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.CodegenConstants;
 import org.openapitools.codegen.languages.AbstractPythonConnexionServerCodegen;
-import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -28,11 +29,13 @@ public class AbstractPythonConnexionServerCodegenTest {
         codegen.additionalProperties().putAll(additionalProperties);
         codegen.processOpts();
         String pythonSrcRoot = Objects.toString(codegen.additionalProperties().get(PYTHON_SRC_ROOT), null);
-        Assert.assertEquals(pythonSrcRoot, expectedValues.pythonSrcRoot);
-        Assert.assertEquals(codegen.apiPackage(), expectedValues.expectedApiPackage);
-        Assert.assertEquals(codegen.modelFileFolder(null), expectedValues.expectedModelFileFolder);
-        Assert.assertEquals(codegen.apiFileFolder(), expectedValues.expectedApiFileFolder);
-        Assert.assertEquals(codegen.toModelImport(modelName, null), expectedValues.expectedImport);
+
+        assertThat(pythonSrcRoot).isEqualTo(expectedValues.pythonSrcRoot);
+        assertThat(codegen.apiPackage()).isEqualTo(expectedValues.expectedApiPackage);
+        assertThat(codegen.modelFileFolder(null)).isEqualTo(expectedValues.expectedModelFileFolder);
+        assertThat(codegen.apiFileFolder()).isEqualTo(expectedValues.expectedApiFileFolder);
+        assertThat(codegen.apiTestFileFolder()).isEqualTo(expectedValues.expectedApiTestFileFolder);
+        assertThat(codegen.toModelImport(modelName, null)).isEqualTo(expectedValues.expectedImport);
     }
 
     @DataProvider
@@ -46,6 +49,7 @@ public class AbstractPythonConnexionServerCodegenTest {
                     "openapi_server.controllers",
                     platformAgnosticPath("generated-code", "connexion", "openapi_server", "models"),
                     platformAgnosticPath("generated-code", "connexion", "openapi_server", "controllers"),
+                    platformAgnosticPath("generated-code", "connexion", "test"),
                     null)
             },
             new Object[]{
@@ -56,6 +60,7 @@ public class AbstractPythonConnexionServerCodegenTest {
                     "openapi_server.controllers",
                     platformAgnosticPath("generated-code", "connexion", "test_root", "openapi_server", "models"),
                     platformAgnosticPath("generated-code", "connexion", "test_root", "openapi_server", "controllers"),
+                    platformAgnosticPath("generated-code", "connexion", "test"),
                     "test_root")
             },
             new Object[]{
@@ -66,6 +71,19 @@ public class AbstractPythonConnexionServerCodegenTest {
                     "test_root.openapi_server.controllers",
                     platformAgnosticPath("generated-code", "connexion", "test_root", "openapi_server", "models"),
                     platformAgnosticPath("generated-code", "connexion", "test_root", "openapi_server", "controllers"),
+                    platformAgnosticPath("generated-code", "connexion", "test"),
+                    null)
+            },
+            new Object[]{
+                "Python src in import and tests under python src root",
+                ImmutableMap.of(PYTHON_SRC_ROOT, "test_root", USE_PYTHON_SRC_ROOT_IN_IMPORTS, "true",
+                    MOVE_TESTS_UNDER_PYTHON_SRC_ROOT, "true"),
+                "TestModel",
+                new ExpectedValues("from test_root.openapi_server.models.test_model import TestModel",
+                    "test_root.openapi_server.controllers",
+                    platformAgnosticPath("generated-code", "connexion", "test_root", "openapi_server", "models"),
+                    platformAgnosticPath("generated-code", "connexion", "test_root", "openapi_server", "controllers"),
+                    platformAgnosticPath("generated-code", "connexion", "test_root", "test"),
                     null)
             },
             new Object[]{
@@ -78,13 +96,24 @@ public class AbstractPythonConnexionServerCodegenTest {
                     "test_root.test_package.controllers",
                     platformAgnosticPath("generated-code", "connexion", "test_root", "test_package", "models"),
                     platformAgnosticPath("generated-code", "connexion", "test_root", "test_package", "controllers"),
+                    platformAgnosticPath("generated-code", "connexion", "test"),
+                    null)
+            },
+            new Object[]{
+                "Python src in import with specified package and tests under python src root",
+                ImmutableMap.of(PYTHON_SRC_ROOT, "test_root",
+                    USE_PYTHON_SRC_ROOT_IN_IMPORTS, "true",
+                    CodegenConstants.PACKAGE_NAME, "test_package",
+                    MOVE_TESTS_UNDER_PYTHON_SRC_ROOT, "true"),
+                "TestModel",
+                new ExpectedValues("from test_root.test_package.models.test_model import TestModel",
+                    "test_root.test_package.controllers",
+                    platformAgnosticPath("generated-code", "connexion", "test_root", "test_package", "models"),
+                    platformAgnosticPath("generated-code", "connexion", "test_root", "test_package", "controllers"),
+                    platformAgnosticPath("generated-code", "connexion", "test_root", "test"),
                     null)
             }
         };
-    }
-
-    private static String platformAgnosticPath(String... nodes) {
-        return StringUtils.join(nodes, File.separatorChar);
     }
 
     private static class MockAbstractPythonConnexionServerCodegen extends AbstractPythonConnexionServerCodegen {
@@ -98,16 +127,22 @@ public class AbstractPythonConnexionServerCodegenTest {
         public final String expectedApiPackage;
         public final String expectedModelFileFolder;
         public final String expectedApiFileFolder;
+        public final String expectedApiTestFileFolder;
         public final String pythonSrcRoot;
 
         public ExpectedValues(String expectedImport, String expectedApiPackage, String expectedModelFileFolder,
-                              String expectedApiFileFolder, String pythonSrcRoot) {
+                              String expectedApiFileFolder, String expectedApiTestFileFolder, String pythonSrcRoot) {
             this.expectedImport = expectedImport;
             this.expectedApiPackage = expectedApiPackage;
             this.expectedModelFileFolder = expectedModelFileFolder;
             this.expectedApiFileFolder = expectedApiFileFolder;
+            this.expectedApiTestFileFolder = expectedApiTestFileFolder;
             this.pythonSrcRoot = pythonSrcRoot != null ? pythonSrcRoot + File.separatorChar : null;
         }
+    }
+
+    private static String platformAgnosticPath(String... nodes) {
+        return StringUtils.join(nodes, File.separatorChar);
     }
 
 }

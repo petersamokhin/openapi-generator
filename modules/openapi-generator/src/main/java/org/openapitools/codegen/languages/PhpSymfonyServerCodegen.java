@@ -114,7 +114,7 @@ public class PhpSymfonyServerCodegen extends AbstractPhpCodegen implements Codeg
         outputFolder = "generated-code" + File.separator + "php";
         apiTemplateFiles.put("api_controller.mustache", ".php");
         modelTestTemplateFiles.put("testing/model_test.mustache", ".php");
-        apiTestTemplateFiles = new HashMap<String, String>();
+        apiTestTemplateFiles = new HashMap<>();
         apiTestTemplateFiles.put("testing/api_test.mustache", ".php");
         embeddedTemplateDir = templateDir = "php-symfony";
 
@@ -140,7 +140,7 @@ public class PhpSymfonyServerCodegen extends AbstractPhpCodegen implements Codeg
         );
 
         // ref: http://php.net/manual/en/language.types.intro.php
-        languageSpecificPrimitives = new HashSet<String>(
+        languageSpecificPrimitives = new HashSet<>(
                 Arrays.asList(
                         "bool",
                         "int",
@@ -158,7 +158,7 @@ public class PhpSymfonyServerCodegen extends AbstractPhpCodegen implements Codeg
                 )
         );
 
-        defaultIncludes = new HashSet<String>(
+        defaultIncludes = new HashSet<>(
                 Arrays.asList(
                         "\\DateTime",
                         "UploadedFile"
@@ -168,13 +168,13 @@ public class PhpSymfonyServerCodegen extends AbstractPhpCodegen implements Codeg
         variableNamingConvention = "camelCase";
 
         // provide primitives to mustache template
-        List sortedLanguageSpecificPrimitives = new ArrayList(languageSpecificPrimitives);
+        List<String> sortedLanguageSpecificPrimitives = new ArrayList<>(languageSpecificPrimitives);
         Collections.sort(sortedLanguageSpecificPrimitives);
         String primitives = "'" + StringUtils.join(sortedLanguageSpecificPrimitives, "', '") + "'";
         additionalProperties.put("primitives", primitives);
 
         // ref: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#data-types
-        typeMapping = new HashMap<String, String>();
+        typeMapping = new HashMap<>();
         typeMapping.put("integer", "int");
         typeMapping.put("long", "int");
         typeMapping.put("decimal", "float");
@@ -371,13 +371,13 @@ public class PhpSymfonyServerCodegen extends AbstractPhpCodegen implements Codeg
         // Type-hintable primitive types
         // ref: http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
         if (phpLegacySupport) {
-            typeHintable = new HashSet<String>(
+            typeHintable = new HashSet<>(
                     Arrays.asList(
                             "array"
                     )
             );
         } else {
-            typeHintable = new HashSet<String>(
+            typeHintable = new HashSet<>(
                     Arrays.asList(
                             "array",
                             "bool",
@@ -397,7 +397,7 @@ public class PhpSymfonyServerCodegen extends AbstractPhpCodegen implements Codeg
         operations.put("controllerName", toControllerName((String) operations.get("pathPrefix")));
         operations.put("symfonyService", toSymfonyService((String) operations.get("pathPrefix")));
 
-        List<CodegenSecurity> authMethods = new ArrayList<CodegenSecurity>();
+        List<CodegenSecurity> authMethods = new ArrayList<>();
         List<CodegenOperation> operationList = (List<CodegenOperation>) operations.get("operation");
 
         for (CodegenOperation op : operationList) {
