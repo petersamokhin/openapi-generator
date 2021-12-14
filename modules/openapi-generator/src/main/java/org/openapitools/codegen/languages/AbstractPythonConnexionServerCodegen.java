@@ -36,6 +36,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -318,8 +319,8 @@ public abstract class AbstractPythonConnexionServerCodegen extends AbstractPytho
     }
 
     @Override
-    public String modelFileFolder() {
-        String pkgPath = modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        String pkgPath = modelPackage(subpackage).replace('.', File.separatorChar);
         return pythonSrcOutputFolder() + pkgPath;
     }
 
@@ -588,14 +589,14 @@ public abstract class AbstractPythonConnexionServerCodegen extends AbstractPytho
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         String modelImport;
         if (StringUtils.startsWithAny(name, "import", "from")) {
             modelImport = name;
         } else {
             modelImport = "from ";
-            if (!"".equals(modelPackage())) {
-                modelImport += modelPackage() + ".";
+            if (!"".equals(modelPackage(subpackage))) {
+                modelImport += modelPackage(subpackage) + ".";
             }
             modelImport += toModelFilename(name) + " import " + name;
         }
@@ -636,7 +637,7 @@ public abstract class AbstractPythonConnexionServerCodegen extends AbstractPytho
         for (String im : imports) {
             if (!im.equals(cm.classname)) {
                 HashMap<String, String> pyImport = new HashMap<>();
-                pyImport.put("import", toModelImport(im));
+                pyImport.put("import", toModelImport(im, null));
                 pyImports.add(pyImport);
             }
         }

@@ -28,6 +28,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -325,8 +326,8 @@ public abstract class AbstractScalaCodegen extends DefaultCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage(subpackage).replace('.', File.separatorChar);
     }
 
     @Override
@@ -445,7 +446,7 @@ public abstract class AbstractScalaCodegen extends DefaultCodegen {
     public Map<String, Object> postProcessModels(Map<String, Object> objs) {
         // remove model imports to avoid warnings for importing class in the same package in Scala
         List<Map<String, String>> imports = (List<Map<String, String>>) objs.get("imports");
-        final String prefix = modelPackage() + ".";
+        final String prefix = modelPackage(null) + ".";
         Iterator<Map<String, String>> iterator = imports.iterator();
         while (iterator.hasNext()) {
             String _import = iterator.next().get("import");

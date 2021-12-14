@@ -27,6 +27,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -228,9 +229,9 @@ public class FlashClientCodegen extends DefaultCodegen implements CodegenConfig 
     }
 
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separatorChar + sourceFolder + File.separatorChar + ("src/"
-                + modelPackage().replace('.', File.separatorChar)).replace('/', File.separatorChar);
+                + modelPackage(subpackage).replace('.', File.separatorChar)).replace('/', File.separatorChar);
     }
 
     @Override

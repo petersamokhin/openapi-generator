@@ -20,6 +20,7 @@ package org.openapitools.codegen.languages;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.meta.features.*;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.EnumSet;
 
@@ -114,7 +115,7 @@ public class StaticDocCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + sourceFolder + File.separator + "models";
     }
 

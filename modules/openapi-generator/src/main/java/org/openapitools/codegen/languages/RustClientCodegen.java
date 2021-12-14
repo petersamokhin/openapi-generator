@@ -29,6 +29,7 @@ import org.openapitools.codegen.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -354,7 +355,7 @@ public class RustClientCodegen extends DefaultCodegen implements CodegenConfig {
         return (outputFolder + File.separator + apiFolder).replace("/", File.separator);
     }
 
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return (outputFolder + File.separator + modelFolder).replace("/", File.separator);
     }
 

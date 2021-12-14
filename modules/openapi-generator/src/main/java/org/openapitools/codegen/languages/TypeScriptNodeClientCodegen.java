@@ -27,6 +27,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -158,12 +159,12 @@ public class TypeScriptNodeClientCodegen extends AbstractTypeScriptClientCodegen
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         if (importMapping.containsKey(name)) {
             return importMapping.get(name);
         }
 
-        return DEFAULT_MODEL_IMPORT_DIRECTORY_PREFIX + modelPackage() + "/" + camelize(toModelName(name), true);
+        return DEFAULT_MODEL_IMPORT_DIRECTORY_PREFIX + modelPackage(subpackage) + "/" + camelize(toModelName(name), true);
     }
 
     @Override
@@ -240,7 +241,7 @@ public class TypeScriptNodeClientCodegen extends AbstractTypeScriptClientCodegen
     @Override
     public void processOpts() {
         super.processOpts();
-        supportingFiles.add(new SupportingFile("models.mustache", modelPackage().replace('.', File.separatorChar), "models.ts"));
+        supportingFiles.add(new SupportingFile("models.mustache", modelPackage(null).replace('.', File.separatorChar), "models.ts"));
         supportingFiles.add(new SupportingFile("api-all.mustache", apiPackage().replace('.', File.separatorChar), "apis.ts"));
         supportingFiles.add(new SupportingFile("api.mustache", getIndexDirectory(), "api.ts"));
         supportingFiles.add(new SupportingFile("git_push.sh.mustache", "", "git_push.sh"));

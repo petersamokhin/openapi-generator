@@ -23,7 +23,6 @@ import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.models.media.*;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.parameters.RequestBody;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.ComposedSchema;
@@ -358,7 +357,7 @@ public class TypeScriptClientCodegen extends DefaultCodegen implements CodegenCo
     }
 
     private String getModelnameFromModelFilename(String filename) {
-        String name = filename.substring((modelPackage() + File.separator).length());
+        String name = filename.substring((modelPackage(null) + File.separator).length());
         return camelize(name);
     }
 

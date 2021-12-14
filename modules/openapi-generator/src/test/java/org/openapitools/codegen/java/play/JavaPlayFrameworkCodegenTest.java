@@ -31,7 +31,7 @@ public class JavaPlayFrameworkCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.FALSE);
         Assert.assertEquals(codegen.isHideGenerationTimestamp(), false);
-        Assert.assertEquals(codegen.modelPackage(), "apimodels");
+        Assert.assertEquals(codegen.modelPackage(null), "apimodels");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "apimodels");
         Assert.assertEquals(codegen.apiPackage(), "controllers");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "controllers");
@@ -56,7 +56,7 @@ public class JavaPlayFrameworkCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.TRUE);
         Assert.assertEquals(codegen.isHideGenerationTimestamp(), true);
-        Assert.assertEquals(codegen.modelPackage(), "xx.yyyyyyyy.model");
+        Assert.assertEquals(codegen.modelPackage(null), "xx.yyyyyyyy.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "xx.yyyyyyyy.model");
         Assert.assertEquals(codegen.apiPackage(), "xx.yyyyyyyy.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "xx.yyyyyyyy.api");
@@ -82,7 +82,7 @@ public class JavaPlayFrameworkCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.TRUE);
         Assert.assertEquals(codegen.isHideGenerationTimestamp(), true);
-        Assert.assertEquals(codegen.modelPackage(), "xyz.yyyyy.mmmmm.model");
+        Assert.assertEquals(codegen.modelPackage(null), "xyz.yyyyy.mmmmm.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "xyz.yyyyy.mmmmm.model");
         Assert.assertEquals(codegen.apiPackage(), "xyz.yyyyy.aaaaa.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "xyz.yyyyy.aaaaa.api");

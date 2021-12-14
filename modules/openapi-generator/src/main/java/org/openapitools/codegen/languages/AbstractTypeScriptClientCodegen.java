@@ -33,6 +33,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -233,16 +234,16 @@ public abstract class AbstractTypeScriptClientCodegen extends DefaultCodegen imp
     }
 
     @Override
-    public String toModelImport(String name){
+    public String toModelImport(String name, @Nullable String subpackage){
         if(isUnionType(name)){
            LOGGER.warn("The import is a union type. Consider using the toModelImportMap method.");
-           return toModelImportMap(name).values().stream().collect(Collectors.joining("|"));
+           return toModelImportMap(name, subpackage).values().stream().collect(Collectors.joining("|"));
         }
         if(isIntersectionType(name)){
            LOGGER.warn("The import is a intersection type. Consider using the toModelImportMap method.");
-           return toModelImportMap(name).values().stream().collect(Collectors.joining("&"));
+           return toModelImportMap(name, subpackage).values().stream().collect(Collectors.joining("&"));
         }
-        return super.toModelImport(name);
+        return super.toModelImport(name, subpackage);
     }
 
     /**
@@ -250,11 +251,12 @@ public abstract class AbstractTypeScriptClientCodegen extends DefaultCodegen imp
      * For example for "classA | classB" the map will two entries have ["model.classA","classA"] and ["model.classB","classB"].
      *
      * @param name the name of the "Model"
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      * @return Map between the fully qualified model import and the initial given name.
      */
     @Override
-    public Map<String,String> toModelImportMap(String name){
-        return toImportMap(splitComposedType(name));
+    public Map<String,String> toModelImportMap(String name, @Nullable String subpackage){
+        return toImportMap(subpackage, splitComposedType(name));
     }
 
     private String[] splitComposedType (String name) {
@@ -269,11 +271,11 @@ public abstract class AbstractTypeScriptClientCodegen extends DefaultCodegen imp
         return name.contains("&");
     }
 
-    private Map<String,String> toImportMap(String... names) {
+    private Map<String,String> toImportMap(String subpackage, String... names) {
         Map<String,String> result = new HashMap<>();
         for(final String name : names) {
             if(needToImport(name)) {
-                result.put(toModelImport(name), name);
+                result.put(toModelImport(name, subpackage), name);
             }
         }
         return result;
@@ -324,8 +326,8 @@ public abstract class AbstractTypeScriptClientCodegen extends DefaultCodegen imp
     }
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + modelPackage(subpackage).replace('.', File.separatorChar);
     }
 
     @Override

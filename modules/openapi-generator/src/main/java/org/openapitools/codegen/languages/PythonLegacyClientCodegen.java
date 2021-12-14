@@ -17,13 +17,13 @@
 
 package org.openapitools.codegen.languages;
 
-import io.swagger.v3.oas.models.media.Schema;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.meta.features.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 import static org.openapitools.codegen.utils.StringUtils.underscore;
@@ -278,14 +278,14 @@ public class PythonLegacyClientCodegen extends AbstractPythonCodegen implements 
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         String modelImport;
         if (StringUtils.startsWithAny(name, "import", "from")) {
             modelImport = name;
         } else {
             modelImport = "from ";
-            if (!"".equals(modelPackage())) {
-                modelImport += modelPackage() + ".";
+            if (!"".equals(modelPackage(subpackage))) {
+                modelImport += modelPackage(subpackage) + ".";
             }
             modelImport += toModelFilename(name) + " import " + name;
         }
@@ -394,8 +394,8 @@ public class PythonLegacyClientCodegen extends AbstractPythonCodegen implements 
     }
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separatorChar + modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separatorChar + modelPackage(subpackage).replace('.', File.separatorChar);
     }
 
     @Override

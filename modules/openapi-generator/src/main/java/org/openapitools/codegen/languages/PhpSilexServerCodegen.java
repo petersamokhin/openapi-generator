@@ -26,6 +26,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.openapitools.codegen.meta.GeneratorMetadata;
 import org.openapitools.codegen.meta.Stability;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -165,8 +166,8 @@ public class PhpSilexServerCodegen extends DefaultCodegen implements CodegenConf
     }
 
     @Override
-    public String modelFileFolder() {
-        return (outputFolder + File.separator + modelPackage()).replace('/', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return (outputFolder + File.separator + modelPackage(subpackage)).replace('/', File.separatorChar);
     }
 
     @Override

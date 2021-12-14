@@ -44,6 +44,9 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
     public List<CodegenModel> interfaceModels;
     public List<CodegenModel> children;
 
+    // Is set when the parent model is set, used to provide the mapping name in the children models
+    public String discriminatorChildMappingName;
+
     // anyOf, oneOf, allOf
     public Set<String> anyOf = new TreeSet<>();
     public Set<String> oneOf = new TreeSet<>();
@@ -80,7 +83,7 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
     public Set<String> allMandatory = new TreeSet<>(); // with parent's required properties
 
     public Set<String> imports = new TreeSet<>();
-    public boolean hasVars, emptyVars, hasMoreModels, hasEnums, isEnum, hasValidation;
+    public boolean hasVars, hasAllVars, emptyVars, hasMoreModels, hasEnums, isEnum, hasValidation;
     /**
      * Indicates the OAS schema specifies "nullable: true".
      */
@@ -415,6 +418,10 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
 
     public void setParentModel(CodegenModel parentModel) {
         this.parentModel = parentModel;
+    }
+
+    public void setDiscriminatorChildMappingName(String discriminatorChildMappingName) {
+        this.discriminatorChildMappingName = discriminatorChildMappingName;
     }
 
     public String getParentSchema() {
@@ -765,6 +772,14 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
         this.hasVars = hasVars;
     }
 
+    public boolean getHasAllVars() {
+        return hasAllVars;
+    }
+
+    public void setHasAllVars(boolean hasAllVars) {
+        this.hasAllVars = hasAllVars;
+    }
+
     @Override
     public boolean getHasRequired() {
         return this.hasRequired;
@@ -842,6 +857,8 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
                 isDate == that.isDate &&
                 isDateTime == that.isDateTime &&
                 hasVars == that.hasVars &&
+                hasAllVars == that.hasAllVars &&
+                Objects.equals(discriminatorChildMappingName, that.discriminatorChildMappingName) &&
                 emptyVars == that.emptyVars &&
                 hasMoreModels == that.hasMoreModels &&
                 hasEnums == that.hasEnums &&
@@ -927,7 +944,7 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
                 getArrayModelType(), isAlias, isString, isInteger, isLong, isNumber, isNumeric, isFloat, isDouble,
                 isDate, isDateTime, isNull, hasValidation, isShort, isUnboundedInteger, isBoolean,
                 getVars(), getAllVars(), getRequiredVars(), getOptionalVars(), getReadOnlyVars(), getReadWriteVars(),
-                getParentVars(), getAllowableValues(), getMandatory(), getAllMandatory(), getImports(), hasVars,
+                getParentVars(), getAllowableValues(), getMandatory(), getAllMandatory(), getImports(), hasVars, hasAllVars, discriminatorChildMappingName,
                 isEmptyVars(), hasMoreModels, hasEnums, isEnum, isNullable, hasRequired, hasOptional, isArray,
                 hasChildren, isMap, isDeprecated, hasOnlyReadOnly, getExternalDocumentation(), getVendorExtensions(),
                 getAdditionalPropertiesType(), getMaxProperties(), getMinProperties(), getUniqueItems(), getMaxItems(),
@@ -990,6 +1007,7 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
         sb.append(", allMandatory=").append(allMandatory);
         sb.append(", imports=").append(imports);
         sb.append(", hasVars=").append(hasVars);
+        sb.append(", hasAllVars=").append(hasAllVars);
         sb.append(", emptyVars=").append(emptyVars);
         sb.append(", hasMoreModels=").append(hasMoreModels);
         sb.append(", hasEnums=").append(hasEnums);
@@ -1063,6 +1081,43 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
         allVars = removeDuplicatedProperty(allVars);
         readOnlyVars = removeDuplicatedProperty(readOnlyVars);
         readWriteVars = removeDuplicatedProperty(readWriteVars);
+    }
+
+    public void removeDiscriminatorPropertyFromEverywhere() {
+        vars = removeDiscriminatorProperty(vars);
+        optionalVars = removeDiscriminatorProperty(optionalVars);
+        requiredVars = removeDiscriminatorProperty(requiredVars);
+        parentVars = removeDiscriminatorProperty(parentVars);
+        allVars = removeDiscriminatorProperty(allVars);
+        readOnlyVars = removeDiscriminatorProperty(readOnlyVars);
+        readWriteVars = removeDiscriminatorProperty(readWriteVars);
+    }
+
+    private List<CodegenProperty> removeDiscriminatorProperty(List<CodegenProperty> vars) {
+        // find discriminator property name
+        final String discriminatorPropertyBaseName;
+
+        if (discriminator != null) {
+            discriminatorPropertyBaseName = discriminator.getPropertyBaseName();
+        } else if (getParentModel() != null && getParentModel().getDiscriminator() != null) {
+            discriminatorPropertyBaseName = getParentModel().getDiscriminator().getPropertyBaseName();
+        } else {
+            discriminatorPropertyBaseName = null;
+        }
+
+        if (discriminatorPropertyBaseName == null) {
+            return vars;
+        }
+
+        // clone the list first
+        List<CodegenProperty> newList = new ArrayList<>();
+        for (CodegenProperty cp : vars) {
+            newList.add(cp.clone());
+        }
+
+        newList.removeIf(element -> Objects.equals(element.baseName, discriminatorPropertyBaseName));
+
+        return newList;
     }
 
     private List<CodegenProperty> removeDuplicatedProperty(List<CodegenProperty> vars) {

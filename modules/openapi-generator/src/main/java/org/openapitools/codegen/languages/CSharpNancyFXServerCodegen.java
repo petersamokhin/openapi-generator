@@ -28,6 +28,7 @@ import org.openapitools.codegen.utils.URLPathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
@@ -245,7 +246,7 @@ public class CSharpNancyFXServerCodegen extends AbstractCSharpCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + sourceFolder() + File.separator + MODEL_NAMESPACE;
     }
 
@@ -350,12 +351,12 @@ public class CSharpNancyFXServerCodegen extends AbstractCSharpCodegen {
     }
 
     @Override
-    public String toModelImport(final String name) {
+    public String toModelImport(final String name, @Nullable String subpackage) {
         final String result;
         if (modelNameMapping.containsValue(name)) {
             final String modelName = modelNameMapping.inverse().get(name);
             result = importMapping.containsKey(modelName) ?
-                    importMapping.get(modelName) : super.toModelImport(name);
+                    importMapping.get(modelName) : super.toModelImport(name, subpackage);
         } else if (importMapping.containsKey(name)) {
             result = importMapping.get(name);
         } else {

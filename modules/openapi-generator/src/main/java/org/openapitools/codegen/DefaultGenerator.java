@@ -33,12 +33,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.comparator.PathFileComparator;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openapitools.codegen.api.TemplateDefinition;
-import org.openapitools.codegen.api.TemplatePathLocator;
-import org.openapitools.codegen.api.TemplateProcessor;
+import org.openapitools.codegen.api.*;
 import org.openapitools.codegen.config.GlobalSettings;
-import org.openapitools.codegen.api.TemplatingEngineAdapter;
-import org.openapitools.codegen.api.TemplateFileType;
 import org.openapitools.codegen.ignore.CodegenIgnoreProcessor;
 import org.openapitools.codegen.languages.PythonClientCodegen;
 import org.openapitools.codegen.meta.GeneratorMetadata;
@@ -55,7 +51,8 @@ import org.openapitools.codegen.utils.URLPathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -381,9 +378,9 @@ public class DefaultGenerator implements Generator {
         }
     }
 
-    private void generateModel(List<File> files, Map<String, Object> models, String modelName) throws IOException {
+    private void generateModel(List<File> files, Map<String, Object> models, String modelName, Map<String, String> modelsSubpackages) throws IOException {
         for (String templateName : config.modelTemplateFiles().keySet()) {
-            String filename = config.modelFilename(templateName, modelName);
+            String filename = config.modelFilename(templateName, modelName, modelsSubpackages.get(modelName));
             File written = processTemplateToFile(models, templateName, filename, generateModels, CodegenConstants.MODELS);
             if (written != null) {
                 files.add(written);
@@ -433,6 +430,8 @@ public class DefaultGenerator implements Generator {
                 Boolean.valueOf(GlobalSettings.getProperty(CodegenConstants.SKIP_FORM_MODEL)) :
                 getGeneratorPropertyDefaultSwitch(CodegenConstants.SKIP_FORM_MODEL, true);
 
+        Map<String, String> modelsSubpackages = ModelUtils.getModelSubpackages(schemas);
+
         // process models only
         for (String name : modelKeys) {
             try {
@@ -442,7 +441,7 @@ public class DefaultGenerator implements Generator {
 
                     for (String templateName : config.modelTemplateFiles().keySet()) {
                         // HACK: Because this returns early, could lead to some invalid model reporting.
-                        String filename = config.modelFilename(templateName, name);
+                        String filename = config.modelFilename(templateName, name, modelsSubpackages.get(name));
                         Path path = java.nio.file.Paths.get(filename);
                         this.templateProcessor.skip(path,"Skipped prior to model processing due to import mapping conflict (either by user or by generator)." );
                     }
@@ -496,7 +495,7 @@ public class DefaultGenerator implements Generator {
 
                 Map<String, Schema> schemaMap = new HashMap<>();
                 schemaMap.put(name, schema);
-                Map<String, Object> models = processModels(config, schemaMap);
+                Map<String, Object> models = processModels(config, schemaMap, modelsSubpackages);
                 models.put("classname", config.toModelName(name));
                 models.putAll(config.additionalProperties());
                 allProcessedModels.put(name, models);
@@ -514,7 +513,7 @@ public class DefaultGenerator implements Generator {
         // generate files based on processed models
         for (String modelName : allProcessedModels.keySet()) {
             Map<String, Object> models = (Map<String, Object>) allProcessedModels.get(modelName);
-            models.put("modelPackage", config.modelPackage());
+            models.put("modelPackage", config.modelPackage(modelsSubpackages.get(modelName)));
             try {
                 //don't generate models that have an import mapping
                 if (config.importMapping().containsKey(modelName)) {
@@ -537,7 +536,7 @@ public class DefaultGenerator implements Generator {
                 }
 
                 // to generate model files
-                generateModel(files, models, modelName);
+                generateModel(files, models, modelName, modelsSubpackages);
 
                 // to generate model test files
                 generateModelTests(files, models, modelName);
@@ -589,7 +588,7 @@ public class DefaultGenerator implements Generator {
                 operation.put("contextPath", contextPath);
                 operation.put("baseName", tag);
                 operation.put("apiPackage", config.apiPackage());
-                operation.put("modelPackage", config.modelPackage());
+                operation.put("modelPackage", config.modelPackage(null));
                 operation.putAll(config.additionalProperties());
                 operation.put("classname", config.toApiName(tag));
                 operation.put("classVarName", config.toApiVarName(tag));
@@ -785,7 +784,7 @@ public class DefaultGenerator implements Generator {
         bundle.put("apiInfo", apis);
         bundle.put("models", allModels);
         bundle.put("apiFolder", config.apiPackage().replace('.', File.separatorChar));
-        bundle.put("modelPackage", config.modelPackage());
+        bundle.put("modelPackage", config.modelPackage(null));
         bundle.put("library", config.getLibrary());
         // todo verify support and operation bundles have access to the common variables
 
@@ -822,7 +821,7 @@ public class DefaultGenerator implements Generator {
      * This adds a boolean and a collection for each authentication type to the map.
      * <p>
      * Examples:
-     * <p> 
+     * <p>
      *   boolean hasOAuthMethods
      * <p>
      *   List&lt;CodegenSecurity&gt; oauthMethods
@@ -888,7 +887,10 @@ public class DefaultGenerator implements Generator {
 
         // resolve inline models
         InlineModelResolver inlineModelResolver = new InlineModelResolver();
-        inlineModelResolver.flatten(openAPI);
+        inlineModelResolver.flatten(
+            openAPI,
+            Boolean.parseBoolean(GlobalSettings.getProperty(CodegenConstants.SKIP_FLATTEN_COMPOSED_CHILDREN, "false"))
+        );
 
         configureGeneratorProperties();
         configureOpenAPIInfo();
@@ -1237,7 +1239,7 @@ public class DefaultGenerator implements Generator {
             if(mapping!= null){
                 result.put(mapping,nextImport);
             }else{
-                result.putAll(config.toModelImportMap(nextImport));
+                result.putAll(config.toModelImportMap(nextImport, null));
             }
         });
         return result;
@@ -1268,9 +1270,9 @@ public class DefaultGenerator implements Generator {
         return result;
      }
 
-    private Map<String, Object> processModels(CodegenConfig config, Map<String, Schema> definitions) {
+    private Map<String, Object> processModels(CodegenConfig config, Map<String, Schema> definitions, Map<String, String> modelsSubpackages) {
         Map<String, Object> objs = new HashMap<>();
-        objs.put("package", config.modelPackage());
+        objs.put("package", config.modelPackage(null));
         List<Object> models = new ArrayList<>();
         Set<String> allImports = new LinkedHashSet<>();
         for (Map.Entry<String, Schema> definitionsEntry : definitions.entrySet()) {
@@ -1281,7 +1283,7 @@ public class DefaultGenerator implements Generator {
             CodegenModel cm = config.fromModel(key, schema);
             Map<String, Object> mo = new HashMap<>();
             mo.put("model", cm);
-            mo.put("importPath", config.toModelImport(cm.classname));
+            mo.put("importPath", config.toModelImport(cm.classname, modelsSubpackages.get(key)));
             models.add(mo);
 
             cm.removeSelfReferenceImport();
@@ -1293,7 +1295,7 @@ public class DefaultGenerator implements Generator {
         for (String nextImport : allImports) {
             String mapping = config.importMapping().get(nextImport);
             if (mapping == null) {
-                mapping = config.toModelImport(nextImport);
+                mapping = config.toModelImport(nextImport, modelsSubpackages.get(nextImport));
             }
             if (mapping != null && !config.defaultIncludes().contains(mapping)) {
                 importSet.add(mapping);

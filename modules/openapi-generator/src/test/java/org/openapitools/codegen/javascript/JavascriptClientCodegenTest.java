@@ -34,7 +34,7 @@ public class JavascriptClientCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.TRUE);
         Assert.assertEquals(codegen.isHideGenerationTimestamp(), true);
-        Assert.assertEquals(codegen.modelPackage(), "model");
+        Assert.assertEquals(codegen.modelPackage(null), "model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), null);
         Assert.assertEquals(codegen.apiPackage(), "api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), null);

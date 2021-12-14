@@ -135,7 +135,7 @@ public class AbstractJavaCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.FALSE);
         Assert.assertFalse(codegen.isHideGenerationTimestamp());
-        Assert.assertEquals(codegen.modelPackage(), "invalidPackageName");
+        Assert.assertEquals(codegen.modelPackage(null), "invalidPackageName");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "invalidPackageName");
         Assert.assertEquals(codegen.apiPackage(), "invalidPackageName");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "invalidPackageName");
@@ -164,7 +164,7 @@ public class AbstractJavaCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.TRUE);
         Assert.assertTrue(codegen.isHideGenerationTimestamp());
-        Assert.assertEquals(codegen.modelPackage(), "xyz.yyyyy.zzzzzzz.model");
+        Assert.assertEquals(codegen.modelPackage(null), "xyz.yyyyy.zzzzzzz.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "xyz.yyyyy.zzzzzzz.model");
         Assert.assertEquals(codegen.apiPackage(), "xyz.yyyyy.zzzzzzz.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "xyz.yyyyy.zzzzzzz.api");
@@ -192,7 +192,7 @@ public class AbstractJavaCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.FALSE);
         Assert.assertFalse(codegen.isHideGenerationTimestamp());
-        Assert.assertEquals(codegen.modelPackage(), "xyz.yyyyy.model.oooooo");
+        Assert.assertEquals(codegen.modelPackage(null), "xyz.yyyyy.model.oooooo");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "xyz.yyyyy.model.oooooo");
         Assert.assertEquals(codegen.apiPackage(), "xyz.yyyyy.api.oooooo");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "xyz.yyyyy.api.oooooo");
@@ -356,7 +356,7 @@ public class AbstractJavaCodegenTest {
         codegen.setOutputDir("/User/open.api.tools");
         codegen.setSourceFolder("source.folder");
         codegen.setModelPackage("org.openapitools.codegen.model");
-        Assert.assertEquals(codegen.modelFileFolder(), "/User/open.api.tools/source.folder/org/openapitools/codegen/model".replace('/', File.separatorChar));
+        Assert.assertEquals(codegen.modelFileFolder(null), "/User/open.api.tools/source.folder/org/openapitools/codegen/model".replace('/', File.separatorChar));
     }
 
     @Test

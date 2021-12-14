@@ -13,6 +13,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -301,8 +302,8 @@ public abstract class AbstractDartCodegen extends DefaultCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage(subpackage).replace('.', File.separatorChar);
     }
 
     @Override

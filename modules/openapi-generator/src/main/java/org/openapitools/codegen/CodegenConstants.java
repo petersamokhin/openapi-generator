@@ -388,4 +388,7 @@ public class CodegenConstants {
         "If true (default), keep the old (incorrect) behaviour that 'additionalProperties' is set to false by default.";
     public static final String USE_ONEOF_DISCRIMINATOR_LOOKUP = "useOneOfDiscriminatorLookup";
     public static final String USE_ONEOF_DISCRIMINATOR_LOOKUP_DESC = "Use the discriminator's mapping in oneOf to speed up the model lookup. IMPORTANT: Validation (e.g. one and only one match in oneOf's schemas) will be skipped.";
+
+    public static final String SKIP_FLATTEN_COMPOSED_CHILDREN = "skipFlattenComposedChildren";
+    public static final String SKIP_FLATTEN_COMPOSED_CHILDREN_DES = "Skip generating the _allOf/_oneOf/_anyOf model classes for inline schemas";
 }

@@ -37,6 +37,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -642,12 +643,12 @@ public abstract class AbstractJavaCodegen extends DefaultCodegen implements Code
 
     @Override
     public String modelTestFileFolder() {
-        return (outputFolder + File.separator + testFolder + File.separator + modelPackage().replace('.', File.separatorChar)).replace('/', File.separatorChar);
+        return (outputFolder + File.separator + testFolder + File.separator + modelPackage(null).replace('.', File.separatorChar)).replace('/', File.separatorChar);
     }
 
     @Override
-    public String modelFileFolder() {
-        return (outputFolder + File.separator + sourceFolder + File.separator + modelPackage().replace('.', File.separatorChar)).replace('/', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return (outputFolder + File.separator + sourceFolder + File.separator + modelPackage(subpackage).replace('.', File.separatorChar)).replace('/', File.separatorChar);
     }
 
     @Override

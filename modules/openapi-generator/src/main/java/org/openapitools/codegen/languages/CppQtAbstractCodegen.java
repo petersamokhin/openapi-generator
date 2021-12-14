@@ -10,6 +10,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -151,7 +152,7 @@ public abstract class CppQtAbstractCodegen extends AbstractCppCodegen implements
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         if (name.isEmpty()) {
             return null;
         }
@@ -164,7 +165,7 @@ public abstract class CppQtAbstractCodegen extends AbstractCppCodegen implements
             return importMapping.get(name);
         }
 
-        String folder = modelPackage().replace("::", File.separator);
+        String folder = modelPackage(subpackage).replace("::", File.separator);
         if (!folder.isEmpty())
             folder += File.separator;
 
@@ -376,13 +377,13 @@ public abstract class CppQtAbstractCodegen extends AbstractCppCodegen implements
 
     private Map<String, String> createMapping(String key, String value) {
         Map<String, String> customImport = new HashMap<>();
-        customImport.put(key, toModelImport(value));
+        customImport.put(key, toModelImport(value, null));
         return customImport;
     }
 
     private boolean isIncluded(String type, List<Map<String, String>> imports) {
         boolean included = false;
-        String inclStr = toModelImport(type);
+        String inclStr = toModelImport(type, null);
         for (Map<String, String> importItem : imports) {
             if (importItem.containsValue(inclStr)) {
                 included = true;

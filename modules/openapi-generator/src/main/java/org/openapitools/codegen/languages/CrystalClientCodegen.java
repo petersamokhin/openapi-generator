@@ -29,6 +29,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -303,7 +304,7 @@ public class CrystalClientCodegen extends DefaultCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + srcFolder + File.separator + shardName + File.separator + modelPackage.replace("/", File.separator);
     }
 

@@ -29,6 +29,7 @@ import org.openapitools.codegen.*;
 import org.openapitools.codegen.meta.features.*;
 import org.openapitools.codegen.utils.ModelUtils;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -234,9 +235,10 @@ public class CppRestSdkClientCodegen extends AbstractCppCodegen {
     /**
      * Location to write model files. You can use the modelPackage() as defined
      * when the class is instantiated
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      */
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + "/" + modelDirName;
     }
 
@@ -250,7 +252,7 @@ public class CppRestSdkClientCodegen extends AbstractCppCodegen {
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         if (importMapping.containsKey(name)) {
             return importMapping.get(name);
         } else {
@@ -265,7 +267,7 @@ public class CppRestSdkClientCodegen extends AbstractCppCodegen {
         Set<String> oldImports = codegenModel.imports;
         codegenModel.imports = new HashSet<>();
         for (String imp : oldImports) {
-            String newImp = toModelImport(imp);
+            String newImp = toModelImport(imp, null);
             if (!newImp.isEmpty()) {
                 codegenModel.imports.add(newImp);
             }

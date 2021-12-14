@@ -27,7 +27,9 @@ import io.swagger.v3.oas.models.servers.ServerVariable;
 import org.openapitools.codegen.api.TemplatingEngineAdapter;
 import org.openapitools.codegen.meta.FeatureSet;
 import org.openapitools.codegen.meta.GeneratorMetadata;
+import org.openapitools.codegen.utils.ModelUtils;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -70,13 +72,18 @@ public interface CodegenConfig {
 
     String embeddedTemplateDir();
 
-    String modelFileFolder();
+    String modelFileFolder(@Nullable String subpackage);
 
     String modelTestFileFolder();
 
     String modelDocFileFolder();
 
-    String modelPackage();
+    /**
+     * To get the base package from the generator config, pass null as the subpackage
+     * @param subpackage {@link ModelUtils#getModelSubpackages}, if any.
+     * @return The base models package from the generator config with or without subpackage.
+     */
+    String modelPackage(@Nullable String subpackage);
 
     String toApiName(String name);
 
@@ -176,9 +183,9 @@ public interface CodegenConfig {
 
     String toModelDocFilename(String name);
 
-    String toModelImport(String name);
+    String toModelImport(String name, @Nullable String subpackage);
 
-    Map<String,String> toModelImportMap(String name);
+    Map<String,String> toModelImportMap(String name, @Nullable String subpackage);
 
     String toApiImport(String name);
 
@@ -200,7 +207,7 @@ public interface CodegenConfig {
 
     void postProcessParameter(CodegenParameter parameter);
 
-    String modelFilename(String templateName, String modelName);
+    String modelFilename(String templateName, String modelName, @Nullable String subpackage);
 
     String apiFilename(String templateName, String tag);
 

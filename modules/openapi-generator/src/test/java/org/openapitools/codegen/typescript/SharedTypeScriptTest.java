@@ -88,7 +88,7 @@ public class SharedTypeScriptTest {
         }};
 
         for (Map.Entry<String, String[]> entry : types.entrySet()) {
-            String[] mapped = codegen.toModelImportMap(entry.getKey()).values().toArray(new String[0]);
+            String[] mapped = codegen.toModelImportMap(entry.getKey(), null).values().toArray(new String[0]);
             Assert.assertEquals(mapped, entry.getValue());
         }
     }

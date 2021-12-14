@@ -29,12 +29,13 @@ public class AbstractPythonConnexionServerCodegenTest {
         codegen.additionalProperties().putAll(additionalProperties);
         codegen.processOpts();
         String pythonSrcRoot = Objects.toString(codegen.additionalProperties().get(PYTHON_SRC_ROOT), null);
+
         assertThat(pythonSrcRoot).isEqualTo(expectedValues.pythonSrcRoot);
         assertThat(codegen.apiPackage()).isEqualTo(expectedValues.expectedApiPackage);
-        assertThat(codegen.modelFileFolder()).isEqualTo(expectedValues.expectedModelFileFolder);
+        assertThat(codegen.modelFileFolder(null)).isEqualTo(expectedValues.expectedModelFileFolder);
         assertThat(codegen.apiFileFolder()).isEqualTo(expectedValues.expectedApiFileFolder);
         assertThat(codegen.apiTestFileFolder()).isEqualTo(expectedValues.expectedApiTestFileFolder);
-        assertThat(codegen.toModelImport(modelName)).isEqualTo(expectedValues.expectedImport);
+        assertThat(codegen.toModelImport(modelName, null)).isEqualTo(expectedValues.expectedImport);
     }
 
     @DataProvider

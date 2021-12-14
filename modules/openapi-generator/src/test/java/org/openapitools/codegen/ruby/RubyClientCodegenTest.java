@@ -76,7 +76,7 @@ public class RubyClientCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.TRUE);
         Assert.assertEquals(codegen.isHideGenerationTimestamp(), true);
-        Assert.assertEquals(codegen.modelPackage(), "models");
+        Assert.assertEquals(codegen.modelPackage(null), "models");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), null);
         Assert.assertEquals(codegen.apiPackage(), "api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), null);

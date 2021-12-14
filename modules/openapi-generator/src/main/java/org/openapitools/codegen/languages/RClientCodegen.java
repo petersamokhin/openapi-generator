@@ -28,6 +28,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -254,7 +255,7 @@ public class RClientCodegen extends DefaultCodegen implements CodegenConfig {
         return outputFolder + File.separator + "R" + File.separator;
     }
 
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + "R" + File.separator;
     }
 
@@ -415,7 +416,7 @@ public class RClientCodegen extends DefaultCodegen implements CodegenConfig {
     public Map<String, Object> postProcessModels(Map<String, Object> objs) {
         // remove model imports to avoid error
         List<Map<String, String>> imports = (List<Map<String, String>>) objs.get("imports");
-        final String prefix = modelPackage();
+        final String prefix = modelPackage(null);
         Iterator<Map<String, String>> iterator = imports.iterator();
         while (iterator.hasNext()) {
             String _import = iterator.next().get("import");

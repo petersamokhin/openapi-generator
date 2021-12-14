@@ -25,6 +25,7 @@ import org.openapitools.codegen.meta.features.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.EnumSet;
 import java.util.Locale;
@@ -170,7 +171,7 @@ public class EiffelClientCodegen extends AbstractEiffelCodegen {
         return outputFolder + File.separator + "src" + File.separator + "api";
     }
 
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + "src" + File.separator + modelPath;
     }
 

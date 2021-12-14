@@ -21,6 +21,8 @@ import org.openapitools.codegen.meta.GeneratorMetadata;
 import org.openapitools.codegen.meta.Stability;
 
 import org.openapitools.codegen.meta.features.*;
+
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -118,7 +120,7 @@ public class AvroSchemaCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator;
     }
 

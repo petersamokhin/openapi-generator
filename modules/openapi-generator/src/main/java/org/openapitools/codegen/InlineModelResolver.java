@@ -53,7 +53,7 @@ public class InlineModelResolver {
 
      final Logger LOGGER = LoggerFactory.getLogger(InlineModelResolver.class);
 
-    void flatten(OpenAPI openapi) {
+    void flatten(OpenAPI openapi, boolean skipFlattenComposedChildren) {
         this.openapi = openapi;
 
         if (openapi.getComponents() == null) {
@@ -65,7 +65,7 @@ public class InlineModelResolver {
         }
 
         flattenPaths(openapi);
-        flattenComponents(openapi);
+        flattenComponents(openapi, skipFlattenComposedChildren);
     }
 
     /**
@@ -416,7 +416,7 @@ public class InlineModelResolver {
      *
      * @param openAPI target spec
      */
-    private void flattenComponents(OpenAPI openAPI) {
+    private void flattenComponents(OpenAPI openAPI, boolean skipFlattenComposedChildren) {
         Map<String, Schema> models = openAPI.getComponents().getSchemas();
         if (models == null) {
             return;
@@ -427,10 +427,13 @@ public class InlineModelResolver {
             Schema model = models.get(modelName);
             if (ModelUtils.isComposedSchema(model)) {
                 ComposedSchema m = (ComposedSchema) model;
-                // inline child schemas
-                flattenComposedChildren(openAPI, modelName + "_allOf", m.getAllOf());
-                flattenComposedChildren(openAPI, modelName + "_anyOf", m.getAnyOf());
-                flattenComposedChildren(openAPI, modelName + "_oneOf", m.getOneOf());
+
+                if (!skipFlattenComposedChildren) {
+                    // inline child schemas
+                    flattenComposedChildren(openAPI, modelName + "_allOf", m.getAllOf());
+                    flattenComposedChildren(openAPI, modelName + "_anyOf", m.getAnyOf());
+                    flattenComposedChildren(openAPI, modelName + "_oneOf", m.getOneOf());
+                }
             } else if (model instanceof Schema) {
                 Schema m = model;
                 Map<String, Schema> properties = m.getProperties();

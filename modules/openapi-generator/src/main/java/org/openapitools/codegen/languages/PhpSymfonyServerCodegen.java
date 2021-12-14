@@ -26,6 +26,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -574,14 +575,15 @@ public class PhpSymfonyServerCodegen extends AbstractPhpCodegen implements Codeg
      * Return the fully-qualified "Model" name for import
      *
      * @param name the name of the "Model"
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      * @return the fully-qualified "Model" name for import
      */
     @Override
-    public String toModelImport(String name) {
-        if ("".equals(modelPackage())) {
+    public String toModelImport(String name, @Nullable String subpackage) {
+        if ("".equals(modelPackage(subpackage))) {
             return name;
         } else {
-            return modelPackage() + "\\" + name;
+            return modelPackage(subpackage) + "\\" + name;
         }
     }
 
@@ -655,6 +657,6 @@ public class PhpSymfonyServerCodegen extends AbstractPhpCodegen implements Codeg
     }
 
     protected Boolean isModelClass(String type) {
-        return Boolean.valueOf(type.contains(modelPackage()));
+        return Boolean.valueOf(type.contains(modelPackage(null)));
     }
 }

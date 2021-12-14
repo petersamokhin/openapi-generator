@@ -25,6 +25,7 @@ import org.openapitools.codegen.*;
 import org.openapitools.codegen.meta.features.DocumentationFeature;
 import org.openapitools.codegen.utils.URLPathUtils;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
@@ -594,8 +595,8 @@ public class JavaPKMSTServerCodegen extends AbstractJavaCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
-        return this.outputFolder + "/" + this.sourceFolder + "/" + modelPackage().replace(".", "/");
+    public String modelFileFolder(@Nullable String subpackage) {
+        return this.outputFolder + "/" + this.sourceFolder + "/" + modelPackage(subpackage).replace(".", "/");
     }
 
     @Override

@@ -59,7 +59,7 @@ public class TypeScriptAngularJsClientCodegen extends AbstractTypeScriptClientCo
     public void processOpts() {
         super.processOpts();
 
-        supportingFiles.add(new SupportingFile("models.mustache", modelPackage().replace('.', File.separatorChar), "models.ts"));
+        supportingFiles.add(new SupportingFile("models.mustache", modelPackage(null).replace('.', File.separatorChar), "models.ts"));
         supportingFiles.add(new SupportingFile("apis.mustache", apiPackage().replace('.', File.separatorChar), "api.ts"));
         supportingFiles.add(new SupportingFile("index.mustache", getIndexDirectory(), "index.ts"));
         supportingFiles.add(new SupportingFile("api.module.mustache", getIndexDirectory(), "api.module.ts"));

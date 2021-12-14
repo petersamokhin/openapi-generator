@@ -33,6 +33,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+
 public class CppTinyClientCodegen extends AbstractCppCodegen implements CodegenConfig {
     public static final String PROJECT_NAME = "TinyClient";
 
@@ -289,7 +291,7 @@ public class CppTinyClientCodegen extends AbstractCppCodegen implements CodegenC
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         if (name.equals("std::string")) {
             return "#include <string>";
         } else if (name.equals("std::list")) {

@@ -352,7 +352,7 @@ public class PythonClientTest {
     public void importSpecialModelNameTest() {
         final PythonClientCodegen codegen = new PythonClientCodegen();
 
-        String importValue = codegen.toModelImport("special.ModelName");
+        String importValue = codegen.toModelImport("special.ModelName", null);
         Assert.assertEquals(importValue, "from models.special_model_name import SpecialModelName");
     }
 

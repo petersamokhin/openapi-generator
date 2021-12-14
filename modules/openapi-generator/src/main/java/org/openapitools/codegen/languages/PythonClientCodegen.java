@@ -39,6 +39,7 @@ import com.github.curiousoddman.rgxgen.RgxGen;
 import com.github.curiousoddman.rgxgen.config.RgxGenOption;
 import com.github.curiousoddman.rgxgen.config.RgxGenProperties;
 
+import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -348,9 +349,9 @@ public class PythonClientCodegen extends PythonLegacyClientCodegen {
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         // name looks like Cat
-        return "from " + modelPackage() + "." + toModelFilename(name) + " import " + toModelName(name);
+        return "from " + modelPackage(subpackage) + "." + toModelFilename(name) + " import " + toModelName(name);
     }
 
     @Override
@@ -369,7 +370,7 @@ public class PythonClientCodegen extends PythonLegacyClientCodegen {
             String[] modelNames = operation.imports.toArray(new String[0]);
             operation.imports.clear();
             for (String modelName : modelNames) {
-                operation.imports.add(toModelImport(modelName));
+                operation.imports.add(toModelImport(modelName, null));
             }
         }
         return objs;
@@ -408,7 +409,7 @@ public class PythonClientCodegen extends PythonLegacyClientCodegen {
                         String[] importModelNames = cm.imports.toArray(new String[0]);
                         cm.imports.clear();
                         for (String importModelName : importModelNames) {
-                            cm.imports.add(toModelImport(importModelName));
+                            cm.imports.add(toModelImport(importModelName, null));
                             String globalImportFixer = "globals()['" + importModelName + "'] = " + importModelName;
                             cm.imports.add(globalImportFixer);
                         }

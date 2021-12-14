@@ -28,6 +28,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -71,6 +72,10 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     // model classes cannot use the same property names defined in HashMap
     // ref: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-hash-map/
     protected Set<String> propertyAdditionalKeywords = new HashSet<>(Arrays.asList("entries", "keys", "size", "values"));
+
+    public static final String REMOVE_DISCRIMINATOR_PROPERTY_FROM_MODELS = "removeDiscriminatorPropertyFromModels";
+    public static final String REMOVE_DISCRIMINATOR_PROPERTY_FROM_MODELS_DESC = "Don't add the discriminator property to data classes, which is redundant e.g. for Kotlinx Serialization";
+    protected boolean removeDiscriminatorPropertyFromModels = false;
 
     public AbstractKotlinCodegen() {
         super();
@@ -249,6 +254,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
         cliOptions.add(new CliOption(CodegenConstants.SORT_MODEL_PROPERTIES_BY_REQUIRED_FLAG, CodegenConstants.SORT_MODEL_PROPERTIES_BY_REQUIRED_FLAG_DESC));
 
         cliOptions.add(CliOption.newBoolean(MODEL_MUTABLE, MODEL_MUTABLE_DESC, false));
+        cliOptions.add(CliOption.newBoolean(REMOVE_DISCRIMINATOR_PROPERTY_FROM_MODELS, REMOVE_DISCRIMINATOR_PROPERTY_FROM_MODELS_DESC));
     }
 
     @Override
@@ -381,8 +387,8 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     }
 
     @Override
-    public String modelFileFolder() {
-        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage().replace('.', File.separatorChar);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage(subpackage).replace('.', File.separatorChar);
     }
 
     @Override
@@ -487,11 +493,17 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
             additionalProperties.put(CodegenConstants.NON_PUBLIC_API, nonPublicApi);
         }
 
+        if (additionalProperties.containsKey(REMOVE_DISCRIMINATOR_PROPERTY_FROM_MODELS)) {
+            this.setRemoveDiscriminatorPropertyFromModels(convertPropertyToBooleanAndWriteBack(REMOVE_DISCRIMINATOR_PROPERTY_FROM_MODELS));
+        } else {
+            additionalProperties.put(REMOVE_DISCRIMINATOR_PROPERTY_FROM_MODELS, removeDiscriminatorPropertyFromModels);
+        }
+
         additionalProperties.put(CodegenConstants.SORT_PARAMS_BY_REQUIRED_FLAG, getSortParamsByRequiredFlag());
         additionalProperties.put(CodegenConstants.SORT_MODEL_PROPERTIES_BY_REQUIRED_FLAG, getSortModelPropertiesByRequiredFlag());
 
         additionalProperties.put(CodegenConstants.API_PACKAGE, apiPackage());
-        additionalProperties.put(CodegenConstants.MODEL_PACKAGE, modelPackage());
+        additionalProperties.put(CodegenConstants.MODEL_PACKAGE, modelPackage(null));
 
         additionalProperties.put("apiDocPath", apiDocPath);
         additionalProperties.put("modelDocPath", modelDocPath);
@@ -621,14 +633,15 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
      * Return the fully-qualified "Model" name for import
      *
      * @param name the name of the "Model"
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      * @return the fully-qualified "Model" name for import
      */
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         // toModelImport is called while processing operations, but DefaultCodegen doesn't
         // define imports correctly with fully qualified primitives and models as defined in this generator.
         if (needToImport(name)) {
-            return super.toModelImport(name);
+            return super.toModelImport(name, subpackage);
         }
 
         return name;
@@ -1015,5 +1028,44 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
         }
 
         return null;
+    }
+
+    public boolean isRemoveDiscriminatorPropertyFromModels() {
+        return removeDiscriminatorPropertyFromModels;
+    }
+
+    public void setRemoveDiscriminatorPropertyFromModels(boolean removeDiscriminatorPropertyFromModels) {
+        this.removeDiscriminatorPropertyFromModels = removeDiscriminatorPropertyFromModels;
+    }
+
+    @Override
+    public String modelPackage(@Nullable String subpackage) {
+        return super.modelPackage(subpackage) + (subpackage != null ? "." + subpackage : "");
+    }
+
+    @Override
+    public Map<String, Object> updateAllModels(Map<String, Object> objs) {
+        Map<String, Object> superResult = super.updateAllModels(objs);
+
+        for (CodegenModel cm : getAllModels(superResult).values()) {
+            if (removeDiscriminatorPropertyFromModels) {
+                cm.removeDiscriminatorPropertyFromEverywhere();
+                if (cm.vars != null) {
+                    cm.hasVars = cm.vars.size() > 0;
+                }
+                if (cm.allVars != null) {
+                    cm.hasAllVars = cm.allVars.size() > 0;
+                }
+            }
+
+            cm.vendorExtensions.put(
+                "x-has-data-class-body",
+                isSerializableModel()
+                    || (cm.getDiscriminator() != null && cm.getHasVars())
+                    || (cm.getAllVars().stream().anyMatch(v -> v.isEnum))
+            );
+        }
+
+        return objs;
     }
 }

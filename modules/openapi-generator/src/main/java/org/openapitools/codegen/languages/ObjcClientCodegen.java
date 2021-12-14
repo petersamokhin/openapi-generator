@@ -26,6 +26,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -317,8 +318,8 @@ public class ObjcClientCodegen extends DefaultCodegen implements CodegenConfig {
         supportingFiles.add(new SupportingFile("gitignore.mustache", "", ".gitignore"));
 
         if (generateCoreData) {
-            supportingFiles.add(new SupportingFile("xccurrentversion.mustache", (modelPackage() + "/" + modelFilesPath + "/").replace("/", File.separator) + classPrefix + "Model.xcdatamodeld", ".xccurrentversion"));
-            supportingFiles.add(new SupportingFile("Model.xcdatamodel.mustache", (modelPackage() + "/" + modelFilesPath + "/").replace("/", File.separator) + classPrefix + "Model.xcdatamodeld" + File.separator + classPrefix + "Model.xcdatamodel", "contents"));
+            supportingFiles.add(new SupportingFile("xccurrentversion.mustache", (modelPackage(null) + "/" + modelFilesPath + "/").replace("/", File.separator) + classPrefix + "Model.xcdatamodeld", ".xccurrentversion"));
+            supportingFiles.add(new SupportingFile("Model.xcdatamodel.mustache", (modelPackage(null) + "/" + modelFilesPath + "/").replace("/", File.separator) + classPrefix + "Model.xcdatamodeld" + File.separator + classPrefix + "Model.xcdatamodel", "contents"));
         }
     }
 
@@ -500,7 +501,7 @@ public class ObjcClientCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         return name;
     }
 
@@ -530,8 +531,8 @@ public class ObjcClientCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String modelFileFolder() {
-        return (outputFolder + "/" + modelPackage() + "/" + modelFilesPath).replace("/", File.separator);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return (outputFolder + "/" + modelPackage(subpackage) + "/" + modelFilesPath).replace("/", File.separator);
     }
 
     public String coreFileFolder() {

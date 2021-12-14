@@ -26,6 +26,7 @@ import org.openapitools.codegen.SupportingFile;
 import org.openapitools.codegen.meta.features.*;
 import org.openapitools.codegen.utils.ModelUtils;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -218,7 +219,7 @@ public class CppTizenClientCodegen extends AbstractCppCodegen implements Codegen
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         if (name.equals("std::string")) {
             return "#include <string>";
         } else if (name.equals("std::map")) {
@@ -266,7 +267,7 @@ public class CppTizenClientCodegen extends AbstractCppCodegen implements Codegen
     }
 
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return outputFolder + File.separator + sourceFolder;
     }
 

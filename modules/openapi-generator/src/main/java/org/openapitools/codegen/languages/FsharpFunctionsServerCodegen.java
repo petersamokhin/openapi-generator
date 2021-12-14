@@ -26,6 +26,8 @@ import org.openapitools.codegen.meta.features.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+
 public class FsharpFunctionsServerCodegen extends AbstractFSharpCodegen {
     public static final String PROJECT_NAME = "projectName";
 
@@ -135,8 +137,8 @@ public class FsharpFunctionsServerCodegen extends AbstractFSharpCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
-        return super.modelFileFolder().replace("Model", "model");
+    public String modelFileFolder(@Nullable String subpackage) {
+        return super.modelFileFolder(subpackage).replace("Model", "model");
     }
 
     @Override
@@ -149,8 +151,8 @@ public class FsharpFunctionsServerCodegen extends AbstractFSharpCodegen {
     }
 
     @Override
-    public String toModelImport(String name) {
-        return packageName + "." + modelPackage() + "." + name;
+    public String toModelImport(String name, @Nullable String subpackage) {
+        return packageName + "." + modelPackage(subpackage) + "." + name;
     }
 
     @Override

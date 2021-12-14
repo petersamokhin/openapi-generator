@@ -44,7 +44,7 @@ public class AbstractPhpCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.TRUE);
         Assert.assertEquals(codegen.isHideGenerationTimestamp(), true);
-        Assert.assertEquals(codegen.modelPackage(), "php\\Model");
+        Assert.assertEquals(codegen.modelPackage(null), "php\\Model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "php\\Model");
         Assert.assertEquals(codegen.apiPackage(), "php\\Api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "php\\Api");
@@ -63,7 +63,7 @@ public class AbstractPhpCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.FALSE);
         Assert.assertEquals(codegen.isHideGenerationTimestamp(), false);
-        Assert.assertEquals(codegen.modelPackage(), "My\\Client\\Model");
+        Assert.assertEquals(codegen.modelPackage(null), "My\\Client\\Model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "My\\Client\\Model");
         Assert.assertEquals(codegen.apiPackage(), "My\\Client\\Api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE),"My\\Client\\Api");
@@ -82,7 +82,7 @@ public class AbstractPhpCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.FALSE);
         Assert.assertEquals(codegen.isHideGenerationTimestamp(), false);
-        Assert.assertEquals(codegen.modelPackage(), "PHPinvoker\\PHPmodel");
+        Assert.assertEquals(codegen.modelPackage(null), "PHPinvoker\\PHPmodel");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "PHPinvoker\\PHPmodel");
         Assert.assertEquals(codegen.apiPackage(), "PHPinvoker\\PHPapi");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "PHPinvoker\\PHPapi");

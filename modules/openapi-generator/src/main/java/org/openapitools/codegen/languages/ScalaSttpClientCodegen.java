@@ -248,7 +248,7 @@ public class ScalaSttpClientCodegen extends AbstractScalaCodegen implements Code
      */
     @SuppressWarnings("unchecked")
     private void postProcessUpdateImports(final Map<String, Object> models) {
-        final String prefix = modelPackage() + ".";
+        final String prefix = modelPackage(null) + ".";
         Map<String, Object> enumRefs = new HashMap<String, Object>();
         for (Map.Entry<String, Object> entry : models.entrySet()) {
             CodegenModel model = ModelUtils.getModelByName(entry.getKey(), models);

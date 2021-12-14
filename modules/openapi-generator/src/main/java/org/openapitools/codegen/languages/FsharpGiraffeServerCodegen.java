@@ -30,6 +30,7 @@ import org.openapitools.codegen.utils.URLPathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.net.URL;
 import java.util.Locale;
@@ -216,8 +217,8 @@ public class FsharpGiraffeServerCodegen extends AbstractFSharpCodegen {
     }
 
     @Override
-    public String modelFileFolder() {
-        return super.modelFileFolder().replace("Model", "model");
+    public String modelFileFolder(@Nullable String subpackage) {
+        return super.modelFileFolder(subpackage).replace("Model", "model");
     }
 
     @Override
@@ -230,8 +231,8 @@ public class FsharpGiraffeServerCodegen extends AbstractFSharpCodegen {
     }
 
     @Override
-    public String toModelImport(String name) {
-        return packageName + "." + modelPackage() + "." + name;
+    public String toModelImport(String name, @Nullable String subpackage) {
+        return packageName + "." + modelPackage(subpackage) + "." + name;
     }
 
     @Override

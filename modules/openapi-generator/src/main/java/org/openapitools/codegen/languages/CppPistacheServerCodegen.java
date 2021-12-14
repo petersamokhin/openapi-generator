@@ -29,6 +29,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -196,7 +197,7 @@ public class CppPistacheServerCodegen extends AbstractCppCodegen {
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         if (importMapping.containsKey(name)) {
             return importMapping.get(name);
         } else {
@@ -212,7 +213,7 @@ public class CppPistacheServerCodegen extends AbstractCppCodegen {
         Set<String> oldImports = codegenModel.imports;
         codegenModel.imports = new HashSet<>();
         for (String imp : oldImports) {
-            String newImp = toModelImport(imp);
+            String newImp = toModelImport(imp, null);
             if (!newImp.isEmpty()) {
                 codegenModel.imports.add(newImp);
             }
@@ -459,9 +460,10 @@ public class CppPistacheServerCodegen extends AbstractCppCodegen {
     /**
      * Location to write model files. You can use the modelPackage() as defined
      * when the class is instantiated
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      */
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return (outputFolder + "/model").replace("/", File.separator);
     }
 

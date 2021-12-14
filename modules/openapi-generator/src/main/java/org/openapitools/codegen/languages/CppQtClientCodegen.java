@@ -24,7 +24,9 @@ import org.openapitools.codegen.SupportingFile;
 import org.openapitools.codegen.meta.features.DocumentationFeature;
 import org.openapitools.codegen.meta.features.GlobalFeature;
 import org.openapitools.codegen.meta.features.SecurityFeature;
+import org.openapitools.codegen.utils.ModelUtils;
 
+import javax.annotation.Nullable;
 import java.io.File;
 
 import static org.openapitools.codegen.utils.StringUtils.*;
@@ -183,10 +185,11 @@ public class CppQtClientCodegen extends CppQtAbstractCodegen implements CodegenC
     /**
      * Location to write model files.  You can use the modelPackage() as defined when the class is
      * instantiated
+     * @param subpackage {@link ModelUtils#getModelSubpackages}
      */
     @Override
-    public String modelFileFolder() {
-        return outputFolder + "/" + sourceFolder + "/" + modelPackage().replace("::", File.separator);
+    public String modelFileFolder(@Nullable String subpackage) {
+        return outputFolder + "/" + sourceFolder + "/" + modelPackage(subpackage).replace("::", File.separator);
     }
 
     /**

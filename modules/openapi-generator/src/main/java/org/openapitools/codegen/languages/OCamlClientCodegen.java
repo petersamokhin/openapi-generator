@@ -29,6 +29,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -483,7 +484,7 @@ public class OCamlClientCodegen extends DefaultCodegen implements CodegenConfig 
     }
 
     @Override
-    public String modelFileFolder() {
+    public String modelFileFolder(@Nullable String subpackage) {
         return (outputFolder + File.separator + modelFolder).replace("/", File.separator);
     }
 

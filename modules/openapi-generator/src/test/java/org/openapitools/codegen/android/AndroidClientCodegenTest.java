@@ -31,7 +31,7 @@ public class AndroidClientCodegenTest {
 
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP), Boolean.TRUE);
         Assert.assertTrue(codegen.isHideGenerationTimestamp());
-        Assert.assertEquals(codegen.modelPackage(), "org.openapitools.client.model");
+        Assert.assertEquals(codegen.modelPackage(null), "org.openapitools.client.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "org.openapitools.client.model");
         Assert.assertEquals(codegen.apiPackage(), "org.openapitools.client.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "org.openapitools.client.api");
@@ -47,7 +47,7 @@ public class AndroidClientCodegenTest {
         codegen.setInvokerPackage("xx.yyyyyyyy.invoker");
         codegen.processOpts();
 
-        Assert.assertEquals(codegen.modelPackage(), "xx.yyyyyyyy.model");
+        Assert.assertEquals(codegen.modelPackage(null), "xx.yyyyyyyy.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "xx.yyyyyyyy.model");
         Assert.assertEquals(codegen.apiPackage(), "xx.yyyyyyyy.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "xx.yyyyyyyy.api");
@@ -63,7 +63,7 @@ public class AndroidClientCodegenTest {
         codegen.additionalProperties().put(CodegenConstants.INVOKER_PACKAGE,"xyz.yyyyy.iiii.invoker");
         codegen.processOpts();
 
-        Assert.assertEquals(codegen.modelPackage(), "xyz.yyyyy.mmmmm.model");
+        Assert.assertEquals(codegen.modelPackage(null), "xyz.yyyyy.mmmmm.model");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.MODEL_PACKAGE), "xyz.yyyyy.mmmmm.model");
         Assert.assertEquals(codegen.apiPackage(), "xyz.yyyyy.aaaaa.api");
         Assert.assertEquals(codegen.additionalProperties().get(CodegenConstants.API_PACKAGE), "xyz.yyyyy.aaaaa.api");

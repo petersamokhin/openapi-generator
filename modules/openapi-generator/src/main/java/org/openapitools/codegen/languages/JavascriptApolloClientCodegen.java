@@ -31,6 +31,7 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -377,8 +378,8 @@ public class JavascriptApolloClientCodegen extends DefaultCodegen implements Cod
     }
 
     @Override
-    public String modelFileFolder() {
-        return createPath(outputFolder, sourceFolder, invokerPackage, modelPackage());
+    public String modelFileFolder(@Nullable String subpackage) {
+        return createPath(outputFolder, sourceFolder, invokerPackage, modelPackage(subpackage));
     }
 
     public String getInvokerPackage() {
@@ -550,7 +551,7 @@ public class JavascriptApolloClientCodegen extends DefaultCodegen implements Cod
     }
 
     @Override
-    public String toModelImport(String name) {
+    public String toModelImport(String name, @Nullable String subpackage) {
         return name;
     }
 
